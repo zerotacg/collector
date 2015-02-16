@@ -1,0 +1,17 @@
+{
+    "nonew": true
+  , "curly": true
+  , "noarg": true
+  , "forin": true
+  , "noempty": true
+  , "eqeqeq": true
+  , "strict": true
+  , "undef": true
+  , "laxcomma": true
+  , "bitwise": true
+  , "browser": true
+  , "globals": {
+        "define": true
+      , "requirejs": true
+    }
+}
