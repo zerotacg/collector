@@ -4,6 +4,8 @@ define( function( require )
     var React       = require( "react" )
       , PageHeader  = require( "react-bootstrap/lib/PageHeader" )
       , Table       = require( "react-bootstrap/lib/Table" )
+
+      , Sync        = require( "./Sync" )
       ;
 
     return React.createClass({
@@ -12,11 +14,8 @@ define( function( require )
             return React.createElement(
                 "div"
               , null
-              , React.createElement(
-                    PageHeader
-                  , null
-                  , "Config"
-                )
+              , React.createElement( PageHeader, null, "Config" )
+              , React.createElement( Sync, this.props.sync, null )
             );
         }
     });

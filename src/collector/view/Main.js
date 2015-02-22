@@ -10,12 +10,14 @@ define( function( require )
       , Config  = require( "./config/Config" )
       ;
 
-    var views = {
-        "config": Config
-    };
-
     return React.createClass({
-        getInitialState: function()
+        getDefaultProps: function()
+        {
+            return {
+            };
+        }
+
+      , getInitialState: function()
         {
             return {
                 path: "home"
@@ -56,12 +58,17 @@ define( function( require )
 
       , renderView: function()
         {
-            var ReactClass = views[ this.state.path ];
-            return ReactClass && React.createElement(
-                ReactClass
-              , null
-              , null
-            );
+            var render = this[ "render_" + this.state.path ];
+            return render && render.call( this );
+        }
+
+      , render_config: function()
+        {
+            return React.createElement(
+                    Config
+                  , this.state.config
+                  , null
+                );
         }
     });
 });

@@ -10,7 +10,7 @@ define(function (require)
     function Application()
     {
         this.db = Database;
-        this.router = Router({
+        this.router = new Router({
             "home": this.onHome.bind( this )
           , "config": this.onConfig.bind( this )
         });
@@ -23,6 +23,22 @@ define(function (require)
           , document.body
         );
         this.router.init();
+        this.db.targetDB()
+            .then( function( db ) {
+                return db.allDocs({ include_docs: true });
+            })
+            .then( function( result ) {
+                var targets = result.rows.map( function( row ) {
+                    return row.doc;
+                });
+                return {
+                    sync: {
+                        targets: targets
+                    }
+                };
+            })
+            .then( this.setConfig.bind( this ) )
+        ;
     };
 
     Application.prototype.getMainView = function()
@@ -33,6 +49,11 @@ define(function (require)
     Application.prototype.setPath = function( path )
     {
         this.getMainView().setState({ path: path });
+    };
+
+    Application.prototype.setConfig = function( config )
+    {
+        this.getMainView().setState({ config: config });
     };
 
     Application.prototype.onHome = function()

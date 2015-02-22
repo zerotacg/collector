@@ -6,8 +6,23 @@ define( function( require )
       , Table       = require( "react-bootstrap/lib/Table" )
       ;
 
+    var Target = React.PropTypes.shape({
+        url: React.PropTypes.string
+    });
+
     return React.createClass({
-        render: function()
+        propTypes: {
+            targets: React.PropTypes.arrayOf( Target )
+        }
+
+      , getDefaultProps: function()
+        {
+            return {
+                targets: []
+            };
+        }
+
+      , render: function()
         {
             return React.createElement(
                 "div"
