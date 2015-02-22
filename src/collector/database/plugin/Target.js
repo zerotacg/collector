@@ -50,7 +50,8 @@ define(function (require)
                     result.rows.forEach( function( target ) {
                         this.sync( target.url, target );
                     }, this );
-                }.bind( this ));
+                }.bind( this ))
+            ;
         }
     };
 });
