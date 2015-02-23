@@ -8,6 +8,7 @@ define( function( require )
       , NavItem = require( "react-bootstrap/lib/NavItem" )
 
       , Config  = require( "./config/Config" )
+      , List    = require( "./List" )
       ;
 
     return React.createClass({
@@ -62,11 +63,20 @@ define( function( require )
             return render && render.call( this );
         }
 
+      , render_home: function()
+        {
+            return React.createElement(
+                List
+              , null
+              , null
+            );
+        }
+
       , render_config: function()
         {
             return React.createElement(
                     Config
-                  , this.state.config
+                  , { config: this.props.config }
                   , null
                 );
         }

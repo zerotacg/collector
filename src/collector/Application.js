@@ -4,13 +4,14 @@ define(function (require)
     var React       = require( "react" )
       , PouchDB     = require( "pouchdb" )
       , Router      = require( "director" )
-      , Database    = require( "./Database" )
+      , Config      = require( "./controller/Config")
       , MainView    = require( "./view/Main" )
       ;
 
     function Application()
     {
-        this.db = Database;
+        this.config = new Config();
+        this.db = new PouchDB( "collector" );
         this.router = new Router({
             "home": this.onHome.bind( this )
           , "config": this.onConfig.bind( this )
@@ -20,48 +21,18 @@ define(function (require)
     Application.prototype.init = function()
     {
         this._main_view = React.render(
-            React.createElement( MainView, null, null )
+            React.createElement( MainView, { config: this.config }, null )
           , document.body
         );
         this.router.init();
-        this.db.targetDB()
-            .then( function( db ) {
-                return db.allDocs({ include_docs: true });
-            })
+
+        this.db.allDocs({ include_docs: true })
             .then( function( result ) {
                 return result.rows.map( function( row ) {
                     return row.doc;
                 });
             })
-            .then( function( targets ) {
-                return targets.reduce( function( prev, target ) {
-                    return prev.then( function( targets ) {
-                        var db = new PouchDB( target.url );
-                        return db.info()
-                            .then( function( info ) {
-                                target.info = info;
-                                return target;
-                            })
-                            .catch( function( error ) {
-                                target.error = error;
-                                return target;
-                            })
-                            .then( function( target ) {
-                                targets.push( target );
-                                return targets;
-                            })
-                        ;
-                    });
-                }, Promise.resolve([]) );
-            })
-            .then( function( targets ) {
-                return {
-                    sync: {
-                        targets: targets
-                    }
-                };
-            })
-            .then( this.setConfig.bind( this ) )
+            .then( this.setItems.bind( this ) )
         ;
     };
 
@@ -78,6 +49,11 @@ define(function (require)
     Application.prototype.setConfig = function( config )
     {
         this.getMainView().setState({ config: config });
+    };
+
+    Application.prototype.setItems = function( items )
+    {
+        this.getMainView().setState({ items: items });
     };
 
     Application.prototype.onHome = function()
