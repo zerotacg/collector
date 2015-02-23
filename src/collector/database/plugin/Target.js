@@ -20,6 +20,18 @@ define(function (require)
         },
 
         /**
+         * @param {string} url
+         */
+        removeTarget: function ( url )
+        {
+            return this.targetDB().then( function( db ) {
+                return db.get( url).then( function( doc ) {
+                    return db.remove( doc );
+                });
+            });
+        },
+
+        /**
          * @returns {Promise}
          */
         targetDB: function()

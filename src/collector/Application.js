@@ -2,6 +2,7 @@ define(function (require)
 {   "use strict";
 
     var React       = require( "react" )
+      , PouchDB     = require( "pouchdb" )
       , Router      = require( "director" )
       , Database    = require( "./Database" )
       , MainView    = require( "./view/Main" )
@@ -28,9 +29,32 @@ define(function (require)
                 return db.allDocs({ include_docs: true });
             })
             .then( function( result ) {
-                var targets = result.rows.map( function( row ) {
+                return result.rows.map( function( row ) {
                     return row.doc;
                 });
+            })
+            .then( function( targets ) {
+                return targets.reduce( function( prev, target ) {
+                    return prev.then( function( targets ) {
+                        var db = new PouchDB( target.url );
+                        return db.info()
+                            .then( function( info ) {
+                                target.info = info;
+                                return target;
+                            })
+                            .catch( function( error ) {
+                                target.error = error;
+                                return target;
+                            })
+                            .then( function( target ) {
+                                targets.push( target );
+                                return targets;
+                            })
+                        ;
+                    });
+                }, Promise.resolve([]) );
+            })
+            .then( function( targets ) {
                 return {
                     sync: {
                         targets: targets
