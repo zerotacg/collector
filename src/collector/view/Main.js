@@ -67,7 +67,7 @@ define( function( require )
         {
             return React.createElement(
                 List
-              , null
+              , { items: this.state.items }
               , null
             );
         }
