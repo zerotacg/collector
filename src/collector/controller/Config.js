@@ -5,7 +5,7 @@ define(function (require)
 
     function Config()
     {
-        this.db = new PouchDB( "collector/config" );
+        this.db = new PouchDB( "collector-config" );
     }
 
     Config.prototype.init = function()
@@ -14,7 +14,7 @@ define(function (require)
 
     Config.prototype.addTarget = function( target )
     {
-        this.db.post( Object.assign({ path: "sync.target" }, target ) );
+        this.db.post( Object.assign({ type: "config.sync.target" }, target ) );
     };
 
     Config.prototype.removeTarget = function( target )

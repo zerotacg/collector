@@ -20,7 +20,14 @@ define( function( require )
 
       , componentDidMount: function()
         {
-            this.props.config.db.changes().on( "change", this.onChanges );
+            this.onChanges();
+            this.changes = this.props.config.db.changes({ live: true, since: "now" }).on( "change", this.onChanges );
+        }
+
+      , componentWillUnmount: function()
+        {
+            this.changes && this.changes.cancel();
+            this.changes = undefined;
         }
 
       , render: function()

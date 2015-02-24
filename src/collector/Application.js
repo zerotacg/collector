@@ -11,7 +11,10 @@ define(function (require)
     function Application()
     {
         this.config = new Config();
-        this.db = new PouchDB( "collector" );
+        var db = this.db = new PouchDB( "collector" );
+        db.changes({ live: true, since: "now" }).on( "change", function( change ) {
+            console.log( "change", change );
+        });
         this.router = new Router({
             "home": this.onHome.bind( this )
           , "config": this.onConfig.bind( this )
@@ -26,7 +29,7 @@ define(function (require)
         );
         this.router.init();
 
-        this.db.allDocs({ include_docs: true })
+        this.db.query( "about/config", { include_docs: true })
             .then( function( result ) {
                 return result.rows.map( function( row ) {
                     return row.doc;
