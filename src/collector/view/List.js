@@ -1,10 +1,7 @@
 define( function( require )
 {   "use strict";
 
-    var React           = require( "react" )
-      , ListGroup       = require( "react-bootstrap/lib/ListGroup" )
-      , ListGroupItem   = require( "react-bootstrap/lib/ListGroupItem" )
-      ;
+    var React = require( "react" );
 
     return React.createClass({
         getDefaultProps: function()
@@ -24,15 +21,32 @@ define( function( require )
         {
             var items = this.props.items.map( function( item, index ) {
                 return React.createElement(
-                    ListGroupItem
-                  , { key: index }
-                  , item.title
+                    "li"
+                  , { key: index, className: "media" }
+                  , React.createElement(
+                        "div"
+                      , { className: "media-left" }
+                      , React.createElement(
+                            "img"
+                          , { src: item.image.thumbnail, className: "thumbnail" }
+                          , null
+                        )
+                    )
+                  , React.createElement(
+                        "div"
+                      , { className: "media-body" }
+                      , React.createElement(
+                            "h4"
+                          , { className: "media-heading" }
+                          , item.title
+                        )
+                    )
                 );
             });
 
             return React.createElement(
-                ListGroup
-              , null
+                "ul"
+              , { className: "media-list" }
               , items
             );
         }

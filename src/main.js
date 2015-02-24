@@ -17,7 +17,6 @@ requirejs.config({
     }
 });
 
-var global = this;
 define( function( require ) {
     "use strict";
 

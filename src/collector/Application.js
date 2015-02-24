@@ -29,7 +29,7 @@ define(function (require)
         );
         this.router.init();
 
-        this.db.query( "about/config", { include_docs: true })
+        this.db.query( "added", { include_docs: true })
             .then( function( result ) {
                 return result.rows.map( function( row ) {
                     return row.doc;
