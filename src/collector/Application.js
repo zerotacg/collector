@@ -59,9 +59,10 @@ define(function (require)
         this.setPath( "config" );
     };
 
-    Application.prototype.onChange = function()
+    Application.prototype.onChange = function( change )
     {
-        this.db.query( "added", { include_docs: true })
+        console.info( "change", change );
+        this.db.query( "added", { include_docs: true, attachments: false })
             .then( function( result ) {
                 return result.rows.map( function( row ) {
                     return row.doc;
