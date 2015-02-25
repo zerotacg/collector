@@ -10,9 +10,7 @@ define( function( require )
 
     return React.createClass({
         propTypes: {
-            url: React.PropTypes.string
-          , live: React.PropTypes.bool
-          , retry: React.PropTypes.bool
+            value: Target
           , onChange: React.PropTypes.func.isRequired
           , onSubmit: React.PropTypes.func.isRequired
         }
@@ -20,9 +18,11 @@ define( function( require )
       , getDefaultProps: function()
         {
             return {
-                url: undefined
-              , live: true
-              , retry: true
+                value: {
+                    url: undefined
+                  , live: true
+                  , retry: true
+                }
               , onChange: function(){}
               , onSubmit: function(){}
             };
@@ -46,7 +46,7 @@ define( function( require )
                 Input
               , {
                     type: "text"
-                  , value: this.props.url
+                  , value: this.props.value.url
                   , placeholder: "e.g. http://my.couch.db:5984/dbname"
                   , label: "Url"
                   , ref: "url"
@@ -62,7 +62,7 @@ define( function( require )
                 Input
               , {
                     type: "checkbox"
-                  , checked: this.props.live
+                  , checked: this.props.value.live
                   , label: "Live"
                   , ref: "live"
                   , onChange: this.handleChange
@@ -78,7 +78,7 @@ define( function( require )
               , {
                     type: "checkbox"
                   , checked: this.props.retry
-                  , readOnly: !this.props.live
+                  , readOnly: !this.props.value.live
                   , label: "Retry"
                   , ref: "retry"
                   , onChange: this.handleChange

@@ -18,7 +18,7 @@ define( function( require )
             };
         }
 
-      , componentDidMount: function()
+      , componentWillMount: function()
         {
             this.onChanges();
             this.changes = this.props.config.db.changes({ live: true, since: "now" }).on( "change", this.onChanges );
@@ -26,7 +26,7 @@ define( function( require )
 
       , componentWillUnmount: function()
         {
-            this.changes && this.changes.cancel();
+            this.changes.cancel();
             this.changes = undefined;
         }
 
@@ -54,7 +54,7 @@ define( function( require )
         {
             return React.createElement(
                 Edit
-              , Object.assign({ onChange: this.onEdit, onSubmit: this.onAdd }, this.state.target )
+              , { onChange: this.onEdit, onSubmit: this.onAdd, value: this.state.target }
               , null
             );
         }

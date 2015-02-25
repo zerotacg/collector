@@ -12,9 +12,7 @@ define(function (require)
     {
         this.config = new Config();
         var db = this.db = new PouchDB( "collector" );
-        db.changes({ live: true, since: "now" }).on( "change", function( change ) {
-            console.log( "change", change );
-        });
+        db.changes({ live: true, since: "now" }).on( "change", this.onChange.bind( this ) );
         this.router = new Router({
             "home": this.onHome.bind( this )
           , "config": this.onConfig.bind( this )
@@ -28,15 +26,7 @@ define(function (require)
           , document.body
         );
         this.router.init();
-
-        this.db.query( "added", { include_docs: true })
-            .then( function( result ) {
-                return result.rows.map( function( row ) {
-                    return row.doc;
-                });
-            })
-            .then( this.setItems.bind( this ) )
-        ;
+        this.onChange();
     };
 
     Application.prototype.getMainView = function()
@@ -67,6 +57,18 @@ define(function (require)
     Application.prototype.onConfig = function()
     {
         this.setPath( "config" );
+    };
+
+    Application.prototype.onChange = function()
+    {
+        this.db.query( "added", { include_docs: true })
+            .then( function( result ) {
+                return result.rows.map( function( row ) {
+                    return row.doc;
+                });
+            })
+            .then( this.setItems.bind( this ) )
+        ;
     };
 
     return Application;

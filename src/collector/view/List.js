@@ -28,7 +28,7 @@ define( function( require )
                       , { className: "media-left" }
                       , React.createElement(
                             "img"
-                          , { src: item.image.thumbnail, className: "thumbnail" }
+                          , { src: item.image, height: 64 }
                           , null
                         )
                     )

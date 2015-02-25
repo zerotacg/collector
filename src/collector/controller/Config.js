@@ -14,7 +14,8 @@ define(function (require)
 
     Config.prototype.addTarget = function( target )
     {
-        this.db.post( Object.assign({ type: "config.sync.target" }, target ) );
+        target.type = "config.sync.target";
+        this.db.post( target );
     };
 
     Config.prototype.removeTarget = function( target )
@@ -29,27 +30,6 @@ define(function (require)
                 return result.rows.map( function( row ) {
                     return row.doc;
                 });
-            })
-            .then( function( targets ) {
-                return targets.reduce( function( prev, target ) {
-                    return prev.then( function( targets ) {
-                        var db = new PouchDB( target.url );
-                        return db.info()
-                            .then( function( info ) {
-                                target.info = info;
-                                return target;
-                            })
-                            .catch( function( error ) {
-                                target.error = error;
-                                return target;
-                            })
-                            .then( function( target ) {
-                                targets.push( target );
-                                return targets;
-                            })
-                        ;
-                    });
-                }, Promise.resolve([]) );
             })
         ;
     };
