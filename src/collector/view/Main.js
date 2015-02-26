@@ -1,3 +1,5 @@
+var global = this;
+
 define( function( require )
 {   "use strict";
 
@@ -37,6 +39,11 @@ define( function( require )
 
       , renderNavigation: function()
         {
+            var location = global.location
+              , ret = location.href.replace( location.hash, "#add/{CODE}" )
+              //, encoded = encodeURIComponent( ret )
+              ;
+
             return React.createElement(
                 Navbar
               , null
@@ -47,6 +54,16 @@ define( function( require )
                         NavItem
                       , { href: "#home", eventKey: "home" }
                       , "Home"
+                    )
+                  , React.createElement(
+                        NavItem
+                      , { href: "http://zxing.appspot.com/scan?ret=" + ret, eventKey: "scan1" }
+                      , "Scan"
+                    )
+                  , React.createElement(
+                        NavItem
+                      , { href: "zxing://scan/?ret=" + ret, eventKey: "scan2" }
+                      , "Scan"
                     )
                   , React.createElement(
                         NavItem

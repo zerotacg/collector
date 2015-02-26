@@ -77,7 +77,7 @@ define( function( require )
                 Input
               , {
                     type: "checkbox"
-                  , checked: this.props.retry
+                  , checked: this.props.value.retry
                   , readOnly: !this.props.value.live
                   , label: "Retry"
                   , ref: "retry"
