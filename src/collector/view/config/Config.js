@@ -3,7 +3,6 @@ define( function( require )
 
     var React       = require( "react" )
       , PageHeader  = require( "react-bootstrap/lib/PageHeader" )
-      , Table       = require( "react-bootstrap/lib/Table" )
 
       , Sync        = require( "./sync/Sync" )
       ;

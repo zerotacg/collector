@@ -2,27 +2,29 @@ define(function (require)
 {   "use strict";
 
     var React       = require( "react" )
-      , PouchDB     = require( "pouchdb" )
       , Router      = require( "director" )
       , Config      = require( "./controller/Config")
+      , collector   = require( "./database/collector" )
       , MainView    = require( "./view/Main" )
       ;
 
     function Application()
     {
         this.config = new Config();
-        var db = this.db = new PouchDB( "collector" );
+        var db = this.db = collector;
         db.changes({ live: true, since: "now" }).on( "change", this.onChange.bind( this ) );
         this.router = new Router({
             "home": this.onHome.bind( this )
           , "config": this.onConfig.bind( this )
+          , "genre": this.onGenre.bind( this )
+          , "genre/:genre": this.onGenre.bind( this )
         });
     }
 
     Application.prototype.init = function()
     {
         this._main_view = React.render(
-            React.createElement( MainView, { config: this.config }, null )
+            React.createElement( MainView, { config: this.config, db: this.db }, null )
           , document.body
         );
         this.router.init();
@@ -36,17 +38,8 @@ define(function (require)
 
     Application.prototype.setPath = function( path )
     {
+        console.log( "path", path );
         this.getMainView().setState({ path: path });
-    };
-
-    Application.prototype.setConfig = function( config )
-    {
-        this.getMainView().setState({ config: config });
-    };
-
-    Application.prototype.setItems = function( items )
-    {
-        this.getMainView().setState({ items: items });
     };
 
     Application.prototype.onHome = function()
@@ -62,14 +55,13 @@ define(function (require)
     Application.prototype.onChange = function( change )
     {
         console.info( "change", change );
-        this.db.query( "added", { include_docs: true, attachments: false })
-            .then( function( result ) {
-                return result.rows.map( function( row ) {
-                    return row.doc;
-                });
-            })
-            .then( this.setItems.bind( this ) )
-        ;
+    };
+
+    Application.prototype.onGenre = function( genre )
+    {
+        genre = genre && decodeURIComponent( genre );
+        console.log( "genre", genre );
+        this.getMainView().setState({ path: "genre", genre: genre });
     };
 
     return Application;

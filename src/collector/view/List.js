@@ -7,19 +7,48 @@ define( function( require )
         getDefaultProps: function()
         {
             return {
-                items: []
+                view: "added"
             };
         }
 
       , getInitialState: function()
         {
             return {
+                items: []
             };
+        }
+
+      , componentWillMount: function( props )
+        {
+            console.log( "list.mount" );
+            props = props || this.props;
+            this.onChanges();
+            this.changes = props.db.changes({
+                live: true
+              , view: props.view
+              , since: "now"
+            }).on( "change", this.onChanges );
+        }
+
+      , componentWillUnmount: function()
+        {
+            console.log( "list.unmount" );
+            this.changes.cancel();
+            this.changes = undefined;
+        }
+
+      , componentWillReceiveProps: function( nextProps )
+        {
+            console.log( "list.receiveProps", nextProps );
+            this.setState({ items: [] });
+            this.componentWillUnmount();
+            this.componentWillMount( nextProps );
         }
 
       , render: function()
         {
-            var items = this.props.items.map( function( item, index ) {
+            console.log( "list.render", this.state.items );
+            var items = this.state.items.map( function( item, index ) {
                 return React.createElement(
                     "li"
                   , { key: index, className: "media" }
@@ -49,6 +78,29 @@ define( function( require )
               , { className: "media-list" }
               , items
             );
+        }
+
+      , onChanges: function()
+        {
+            var options = React.__spread({
+                include_docs: true
+              , reduce: false
+            }, this.props.query );
+            this.props.db.query( this.props.view, options ).then( this.onData );
+        }
+
+      , onData: function( result )
+        {
+            if( !this.isMounted() )
+            {
+                return;
+            }
+
+            console.log( "list", this.isMounted(), result );
+            var items = result.rows.map( function( row ) {
+                return row.doc;
+            });
+            this.setState({ items: items });
         }
     });
 });
