@@ -2,6 +2,7 @@ define( function( require )
 {   "use strict";
 
     var React           = require( "react" )
+      , Badge           = require( "react-bootstrap/lib/Badge" )
       , ListGroup       = require( "react-bootstrap/lib/ListGroup" )
       , ListGroupItem   = require( "react-bootstrap/lib/ListGroupItem" )
       , List            = require( "./List" )
@@ -42,10 +43,16 @@ define( function( require )
             return React.createElement(
                 ListGroup
               , null
-              , this.state.items.map( function( genre ) {
+              , this.state.items.map( function( row ) {
+                    var genre = row.key;
                     return React.createElement(
                         ListGroupItem
                       , { key: genre, href: "#genre/" + genre }
+                      , React.createElement(
+                            Badge
+                          , null
+                          , row.value
+                        )
                       , genre
                     );
                 })
@@ -60,7 +67,7 @@ define( function( require )
       , onGenres: function( result )
         {
             var items = result.rows.map( function( row ) {
-                return row.key;
+                return row;
             });
             this.setState({ items: items });
         }

@@ -7,6 +7,7 @@ requirejs.config({
       , "jquery": "jquery/dist/jquery.min"
       , "text": "requirejs-text/text"
       , "json": "requirejs-json/json"
+      , "docuri": "../build/docuri"
 
       , "collector": "../src/collector"
     }
@@ -25,6 +26,6 @@ define( function( require ) {
       ;
 
     app.init();
-    app.db.sync("http://192.168.0.19:5984/collector", { live: true });
-    app.config.db.sync("http://192.168.0.19:5984/collector-config", { live: true });
+    app.db.sync("http://192.168.0.19:5984/collector");
+    app.config.db.sync("http://192.168.0.19:5984/collector-config");
 });

@@ -17,6 +17,8 @@
   "license": "MIT",
   "devDependencies": {
     "mocha": "~2.1.0",
-    "grunt": "~0.4.5"
+    "grunt": "~0.4.5",
+    "docuri": "~4.0.2",
+    "browserify": "~9.0.3"
   }
 }

@@ -39,10 +39,10 @@ define( function( require )
 
       , componentWillReceiveProps: function( nextProps )
         {
-            console.log( "list.receiveProps", nextProps );
-            this.setState({ items: [] });
-            this.componentWillUnmount();
-            this.componentWillMount( nextProps );
+            console.log( "list.receiveProps", this.props, nextProps );
+            //this.setState({ items: [] });
+            //this.componentWillUnmount();
+            //this.componentWillMount( nextProps );
         }
 
       , render: function()
