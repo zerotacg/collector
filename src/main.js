@@ -16,6 +16,8 @@ requirejs.config({
             exports: "Router"
         }
     }
+
+  , urlArgs: "bust=" + Date.now()
 });
 
 define( function( require ) {

@@ -5,13 +5,16 @@ define( function( require )
       , Badge           = require( "react-bootstrap/lib/Badge" )
       , ListGroup       = require( "react-bootstrap/lib/ListGroup" )
       , ListGroupItem   = require( "react-bootstrap/lib/ListGroupItem" )
-      , List            = require( "./List" )
       ;
 
     return React.createClass({
         getDefaultProps: function()
         {
             return {
+                query: {
+                    group: true
+                  , group_level: 1
+                }
             };
         }
 
@@ -43,25 +46,30 @@ define( function( require )
             return React.createElement(
                 ListGroup
               , null
-              , this.state.items.map( function( row ) {
-                    var genre = row.key;
-                    return React.createElement(
-                        ListGroupItem
-                      , { key: genre, href: "#genre/" + genre }
-                      , React.createElement(
-                            Badge
-                          , null
-                          , row.value
-                        )
-                      , genre
-                    );
-                })
+              , this.state.items.map( this.renderRow )
+            );
+        }
+
+      , renderRow: function( row )
+        {
+            row.key = row.key || "None";
+            row.href = this.props.uri.genre( row );
+
+            return React.createElement(
+                ListGroupItem
+              , row
+              , React.createElement(
+                    Badge
+                  , null
+                  , row.value
+                )
+              , row.key
             );
         }
 
       , onChanges: function()
         {
-            this.props.db.query( "genre", { reduce: "_count", group: true } ).then( this.onGenres );
+            this.props.db.query( "genre", this.props.query ).then( this.onGenres );
         }
 
       , onGenres: function( result )

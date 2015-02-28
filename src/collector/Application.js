@@ -1,30 +1,55 @@
 define(function (require)
 {   "use strict";
 
-    var React       = require( "react" )
+    var DocUri      = require( "docuri" )
+      , React       = require( "react" )
       , Router      = require( "director" )
       , Config      = require( "./controller/Config")
       , collector   = require( "./database/collector" )
       , MainView    = require( "./view/Main" )
       ;
 
+    var log_arguments = function( name ){
+        return function() { console.log( name, arguments ); };
+    };
+
     function Application()
     {
         this.config = new Config();
         var db = this.db = collector;
         db.changes({ live: true, since: "now" }).on( "change", this.onChange.bind( this ) );
-        this.router = new Router({
-            "home": this.onHome.bind( this )
+        this.router = this.createRouter();
+        var uri = this.uri = DocUri;
+        uri.routes({
+            ":Barcode": "id"
+          , "#view/:_id": "view"
+          , "#genre(/:key)": "genre"
+        });
+    }
+
+    Application.prototype.createRouter = function()
+    {
+        var router = new Router({
+            "recent": this.onRecent.bind( this )
           , "config": this.onConfig.bind( this )
           , "genre": this.onGenre.bind( this )
           , "genre/:genre": this.onGenre.bind( this )
         });
-    }
+
+        router.param( "_id", /(([^\/]*\/)*?[^\/]*)\/?$/ );
+        router.on( "view/:_id", this.onItemView.bind( this ) );
+
+        return router;
+    };
 
     Application.prototype.init = function()
     {
         this._main_view = React.render(
-            React.createElement( MainView, { config: this.config, db: this.db }, null )
+            React.createElement( MainView, {
+                config: this.config
+              , db: this.db
+              , uri: this.uri
+            }, null )
           , document.body
         );
         this.router.init();
@@ -42,9 +67,9 @@ define(function (require)
         this.getMainView().setState({ path: path });
     };
 
-    Application.prototype.onHome = function()
+    Application.prototype.onRecent = function()
     {
-        this.setPath( "home" );
+        this.setPath( "recent" );
     };
 
     Application.prototype.onConfig = function()
@@ -62,6 +87,13 @@ define(function (require)
         genre = genre && decodeURIComponent( genre );
         console.log( "genre", genre );
         this.getMainView().setState({ path: "genre", genre: genre });
+    };
+
+    Application.prototype.onItemView = function( id )
+    {
+        id = id && decodeURIComponent( id );
+        console.log( "view", id );
+        this.getMainView().setState({ path: "view", view: { id: id } });
     };
 
     return Application;

@@ -9,9 +9,10 @@ define( function( require )
       , Navbar  = require( "react-bootstrap/lib/Navbar" )
       , NavItem = require( "react-bootstrap/lib/NavItem" )
 
-      , Config  = require( "./config/Config" )
-      , Genre   = require( "./Genre" )
-      , List    = require( "./List" )
+      , Config      = require( "./config/Config" )
+      , Genre       = require( "./Genre" )
+      , List        = require( "./List" )
+      , ItemView    = require( "./item/View" )
       ;
 
     return React.createClass({
@@ -24,7 +25,7 @@ define( function( require )
       , getInitialState: function()
         {
             return {
-                path: "home"
+                path: "recent"
             };
         }
 
@@ -48,14 +49,14 @@ define( function( require )
 
             return React.createElement(
                 Navbar
-              , null
+              , { brand: this.renderBrand() }
               , React.createElement(
                     Nav
                   , { activeKey: this.state.path }
                   , React.createElement(
                         NavItem
-                      , { href: "#home", eventKey: "home" }
-                      , "Home"
+                      , { href: "#recent", eventKey: "recent" }
+                      , "Recent"
                     )
                   , React.createElement(
                         NavItem
@@ -86,9 +87,18 @@ define( function( require )
             );
         }
 
+      , renderBrand: function()
+        {
+            return React.createElement(
+                "a"
+              , { href: "" }
+              , "Collector"
+            );
+        }
+
       , renderView: function()
         {
-            var render = this[ "render_" + this.state.path ];
+            var render = this[ "render_" + this.state.path ] || this.render_home;
             return render && render.call( this );
         }
 
@@ -96,7 +106,16 @@ define( function( require )
         {
             return React.createElement(
                 List
-              , { db: this.props.db, key: "added", view: "added", query: { descending: true } }
+              , {
+                    db: this.props.db
+                  , uri: this.props.uri
+                  , key: "added"
+                  , view: "added"
+                  , query: {
+                        descending: true
+                      , limit: 10
+                    }
+                }
               , null
             );
         }
@@ -104,10 +123,10 @@ define( function( require )
       , render_config: function()
         {
             return React.createElement(
-                    Config
-                  , { config: this.props.config }
-                  , null
-                );
+                Config
+              , { config: this.props.config }
+              , null
+            );
         }
 
       , render_genre: function()
@@ -115,15 +134,31 @@ define( function( require )
             var genre = this.state.genre;
             if( genre )
             {
+                genre = genre === "None" ? null : genre;
                 return React.createElement(
                     List
-                  , { db: this.props.db, key: "genre", view: "genre", query: { key: genre } }
+                  , {
+                        db: this.props.db
+                      , uri: this.props.uri
+                      , key: "genre"
+                      , view: "genre"
+                      , query: { key: genre }
+                    }
                   , null
                 );
             }
             return React.createElement(
                 Genre
-              , { db: this.props.db }
+              , { db: this.props.db, uri: this.props.uri }
+              , null
+            );
+        }
+
+      , render_view: function()
+        {
+            return React.createElement(
+                ItemView
+              , React.__spread( { db: this.props.db, uri: this.props.uri }, this.state.view )
               , null
             );
         }

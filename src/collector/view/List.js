@@ -4,7 +4,14 @@ define( function( require )
     var React = require( "react" );
 
     return React.createClass({
-        getDefaultProps: function()
+        propTypes: {
+            uri: React.PropTypes.shape({
+                view: React.PropTypes.func.isRequired
+            }).isRequired
+          , view: React.PropTypes.string.isRequired
+        }
+
+      , getDefaultProps: function()
         {
             return {
                 view: "added"
@@ -41,42 +48,64 @@ define( function( require )
         {
             console.log( "list.receiveProps", this.props, nextProps );
             //this.setState({ items: [] });
-            //this.componentWillUnmount();
-            //this.componentWillMount( nextProps );
+            this.componentWillUnmount();
+            this.componentWillMount( nextProps );
         }
 
       , render: function()
         {
             console.log( "list.render", this.state.items );
-            var items = this.state.items.map( function( item, index ) {
-                return React.createElement(
-                    "li"
-                  , { key: index, className: "media" }
-                  , React.createElement(
-                        "div"
-                      , { className: "media-left" }
-                      , React.createElement(
-                            "img"
-                          , { src: item.image, height: 64 }
-                          , null
-                        )
-                    )
-                  , React.createElement(
-                        "div"
-                      , { className: "media-body" }
-                      , React.createElement(
-                            "h4"
-                          , { className: "media-heading" }
-                          , item.title
-                        )
-                    )
-                );
-            });
+            var items = this.state.items.map( this.renderItem );
 
             return React.createElement(
                 "ul"
               , { className: "media-list" }
               , items
+            );
+        }
+
+      , renderItem: function( item, index )
+        {
+            return React.createElement(
+                "li"
+              , { key: index, className: "media" }
+              , React.createElement(
+                    "div"
+                  , { className: "media-left" }
+                  , this.renderAnchor( item, this.renderImage( item.Image ) )
+                )
+              , React.createElement(
+                    "div"
+                  , { className: "media-body" }
+                  , this.renderAnchor( item, this.renderHeading( item.Title ) )
+                )
+            );
+        }
+
+      , renderAnchor: function( item, child )
+        {
+            return React.createElement(
+                "a"
+              , { href: this.props.uri.view( item ) }
+              , child
+            );
+        }
+
+      , renderImage: function( image )
+        {
+            return  React.createElement(
+                "img"
+              , { src: image, height: 64 }
+              , null
+            );
+        }
+
+      , renderHeading: function( title )
+        {
+            return React.createElement(
+                "h4"
+              , { className: "media-heading" }
+              , title
             );
         }
 
@@ -86,6 +115,7 @@ define( function( require )
                 include_docs: true
               , reduce: false
             }, this.props.query );
+            console.log( "list.query", options );
             this.props.db.query( this.props.view, options ).then( this.onData );
         }
 
