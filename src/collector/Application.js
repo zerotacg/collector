@@ -7,6 +7,7 @@ define(function (require)
       , Config      = require( "./controller/Config")
       , collector   = require( "./database/collector" )
       , MainView    = require( "./view/Main" )
+      , ItemList    = require( "./view/item/List" )
       ;
 
     var log_arguments = function( name ){
@@ -112,8 +113,9 @@ define(function (require)
                 view: "field"
               , viewKey: key
               , db: this.db
-              , uri: this.uri.field
-
+              , uri: this.uri
+              , keyLength: 2
+              , docList: ItemList
             }
         });
     };

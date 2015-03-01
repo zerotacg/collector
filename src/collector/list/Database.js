@@ -5,66 +5,58 @@ define( function( require )
       , Badge           = require( "react-bootstrap/lib/Badge" )
       , ListGroup       = require( "react-bootstrap/lib/ListGroup" )
       , ListGroupItem   = require( "react-bootstrap/lib/ListGroupItem" )
+
+      , DatabaseMixin   = require( "./DatabaseMixin" )
       ;
 
     return React.createClass({
-        propTypes: {
+        mixins: [ DatabaseMixin ]
+
+      , propTypes: {
             view: React.PropTypes.string.isRequired
-          , docList: React.PropTypes.element
         }
 
       , getDefaultProps: function()
         {
-            return {
-            };
+            return {};
         }
 
       , getInitialState: function()
         {
             return {
-                result: {
+                data: {
                     rows: []
                 }
             };
         }
 
-      , componentWillMount: function( props )
-        {
-            this.onChanges();
-            props = props || this.props;
-            this.changes = props.db.changes({
-                live: true
-              , view: props.view
-              , since: "now"
-            }).on( "change", this.onChanges );
-        }
-
-      , componentWillUnmount: function()
-        {
-            this.changes.cancel();
-            this.changes = undefined;
-        }
-
-      , componentWillReceiveProps: function( nextProps )
-        {
-            this.componentWillUnmount();
-            this.componentWillMount( nextProps );
-        }
-
       , render: function()
         {
+            var props = this.props
+              , rows = this.state.data && this.state.data.rows || []
+              ;
+            if ( this.level( props ) >= props.keyLength )
+            {
+                return React.createElement(
+                    props.docList
+                  , { uri: props.uri }
+                  , rows
+                );
+            }
+
             return React.createElement(
                 ListGroup
               , null
-              , this.state.result.rows.map( this.renderRow )
+              , rows.map( this.renderRow )
             );
         }
 
       , renderRow: function( row )
         {
-            var props = this.props;
-            var key = row.key[this.level()];
-            row.href = props.uri( row );
+            var props = this.props
+              , key = row.key[this.level( props )]
+              ;
+            row.href = props.uri.field( row );
 
             return React.createElement(
                 ListGroupItem
@@ -78,9 +70,9 @@ define( function( require )
             );
         }
 
-      , level: function()
+      , level: function( props )
         {
-            return (this.props.viewKey || []).length;
+            return (props.viewKey || []).length;
         }
 
       , endkey: function( startkey )
@@ -94,27 +86,19 @@ define( function( require )
             return endkey;
         }
 
-      , onChanges: function()
+      , queryOptions: function( props )
         {
-            var key = this.props.viewKey;
-            var options = {
-                group: true
-              , group_level: this.level() + 1
+            var key = props.viewKey;
+            var level = this.level( props ) + 1;
+            var include_docs = level > props.keyLength;
+            return {
+                group: !include_docs
+              , group_level: level
+              , include_docs: include_docs
+              , reduce: !include_docs
               , startkey: key
               , endkey: this.endkey( key )
             };
-            console.log( "database.query", options );
-            this.props.db.query( this.props.view, options ).then( this.onData );
-        }
-
-      , onData: function( result )
-        {
-            if( !this.isMounted() )
-            {
-                return;
-            }
-            console.log( "database.data", result );
-            this.setState({ result: result });
         }
     });
 });
