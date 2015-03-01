@@ -7,13 +7,13 @@ define( function( require )
         propTypes: {
             id: React.PropTypes.string.isRequired
           , rev: React.PropTypes.string
-          , filterKeys: React.PropTypes.arrayOf( React.PropTypes.string).isRequired
+          , ignore: React.PropTypes.arrayOf( React.PropTypes.string).isRequired
         }
 
       , getDefaultProps: function()
         {
             return {
-                filterKeys: [ "_id", "_rev" ]
+                ignore: [ "_id", "_rev" ]
             };
         }
 
@@ -62,10 +62,10 @@ define( function( require )
 
       , renderFields: function( doc )
         {
-            var filterKeys = this.props.filterKeys;
+            var ignore = this.props.ignore;
             var keys = Object.keys( doc )
                 .filter( function( key ) {
-                    return filterKeys.indexOf( key ) === -1;
+                    return ignore.indexOf( key ) === -1;
                 })
             ;
 

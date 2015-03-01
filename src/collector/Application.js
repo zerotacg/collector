@@ -24,6 +24,7 @@ define(function (require)
             ":Barcode": "id"
           , "#view/:_id": "view"
           , "#genre(/:key)": "genre"
+          , "#field(/*key)": "field"
         });
     }
 
@@ -38,6 +39,9 @@ define(function (require)
 
         router.param( "_id", /(([^\/]*\/)*?[^\/]*)\/?$/ );
         router.on( "view/:_id", this.onItemView.bind( this ) );
+        router.param( "key", /(([^\/]*\/)*?[^\/]*)\/?$/ );
+        router.on( "field", this.onField.bind( this ) );
+        router.on( "field/:key", this.onField.bind( this ) );
 
         return router;
     };
@@ -88,12 +92,30 @@ define(function (require)
         console.log( "genre", genre );
         this.getMainView().setState({ path: "genre", genre: genre });
     };
-
     Application.prototype.onItemView = function( id )
     {
         id = id && decodeURIComponent( id );
         console.log( "view", id );
         this.getMainView().setState({ path: "view", view: { id: id } });
+    };
+
+    Application.prototype.onField = function( key )
+    {
+        if ( key )
+        {
+            key = decodeURIComponent( key).split( "/" );
+        }
+        console.log( "field", key );
+        this.getMainView().setState({
+            path: "field"
+          , field: {
+                view: "field"
+              , viewKey: key
+              , db: this.db
+              , uri: this.uri.field
+
+            }
+        });
     };
 
     return Application;

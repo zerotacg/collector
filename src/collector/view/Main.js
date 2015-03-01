@@ -11,6 +11,7 @@ define( function( require )
 
       , Config      = require( "./config/Config" )
       , Genre       = require( "./Genre" )
+      , Database    = require( "./../list/Database" )
       , List        = require( "./List" )
       , ItemView    = require( "./item/View" )
       ;
@@ -62,6 +63,11 @@ define( function( require )
                         NavItem
                       , { href: "#genre", eventKey: "genre" }
                       , "Genre"
+                    )
+                  , React.createElement(
+                        NavItem
+                      , { href: "#field", eventKey: "field" }
+                      , "Field"
                     )
                   , React.createElement(
                         NavItem
@@ -150,6 +156,15 @@ define( function( require )
             return React.createElement(
                 Genre
               , { db: this.props.db, uri: this.props.uri }
+              , null
+            );
+        }
+
+      , render_field: function()
+        {
+            return React.createElement(
+                Database
+              , this.state.field
               , null
             );
         }
