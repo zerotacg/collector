@@ -14,6 +14,7 @@ define( function( require )
       , Database    = require( "./../list/Database" )
       , List        = require( "./List" )
       , ItemView    = require( "./item/View" )
+      , TypeView    = require( "./meta/Type" )
       ;
 
     return React.createClass({
@@ -88,6 +89,11 @@ define( function( require )
                         NavItem
                       , { href: "#config", eventKey: "config" }
                       , "Config"
+                    )
+                  , React.createElement(
+                        NavItem
+                      , { href: "#type", eventKey: "type" }
+                      , "Type"
                     )
                 )
             );
@@ -174,6 +180,15 @@ define( function( require )
             return React.createElement(
                 ItemView
               , React.__spread( { db: this.props.db, uri: this.props.uri }, this.state.view )
+              , null
+            );
+        }
+
+      , render_type: function()
+        {
+            return React.createElement(
+                TypeView
+              , React.__spread( { db: this.props.db, uri: this.props.uri }, this.state.data )
               , null
             );
         }

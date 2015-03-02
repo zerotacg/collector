@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Collector</title>
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+
+    <!--link rel="stylesheet" href="resources/css/collector.css"/-->
+</head>
+<body>
+<div class="container">
+    <nav role="navigation" class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="">Collector</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="#recent">Recent</a></li>
+                <li><a href="#genre">Genre</a></li>
+                <li><a href="#field">Field</a></li>
+                <li><a href="http://zxing.appspot.com/scan?ret=http%3A%2F%2Flocalhost%2Fcollector%2F%23add%2F%7BCODE%7D">Scan</a></li>
+                <li><a href="zxing://scan/?ret=http%3A%2F%2Flocalhost%2Fcollector%2F%23add%2F%7BCODE%7D">Scan</a></li>
+                <li><a href="intent://scan/?ret=http%3A%2F%2Flocalhost%2Fcollector%2F%23add%2F%7BCODE%7D#Intent;scheme=zxing;package=com.google.zxing.client.android;end">Scan</a></li>
+                <li><a href="#config">Config</a></li>
+                <li class="active"><a href="#type">Type</a></li>
+            </ul>
+        </div>
+    </nav>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-sm-2"><span>Id</span></label>
+            <div class="col-sm-10">
+                <input label="Id" placeholder="Enter text" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2"><span>Name</span></label>
+            <div class="col-sm-10">
+                <input label="Name" placeholder="Enter text" class="form-control" type="text">
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

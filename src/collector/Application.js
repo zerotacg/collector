@@ -31,18 +31,23 @@ define(function (require)
 
     Application.prototype.createRouter = function()
     {
-        var router = new Router({
-            "recent": this.onRecent.bind( this )
-          , "config": this.onConfig.bind( this )
-          , "genre": this.onGenre.bind( this )
-          , "genre/:genre": this.onGenre.bind( this )
+        var router = new Router();
+        router.configure({
+            on: console.log.bind( console, "router" )
         });
-
-        router.param( "_id", /(([^\/]*\/)*?[^\/]*)\/?$/ );
-        router.on( "view/:_id", this.onItemView.bind( this ) );
-        router.param( "key", /(([^\/]*\/)*?[^\/]*)\/?$/ );
-        router.on( "field", this.onField.bind( this ) );
-        router.on( "field/:key", this.onField.bind( this ) );
+        router.param( "path", /(.+)/ );
+        router.mount({
+            "recent": this.setPath.bind( this, "recent" )
+          , "config": this.setPath.bind( this, "config" )
+          , "genre": this.setPath.bind( this, "genre" )
+          , "genre/:genre": this.onGenre.bind( this )
+          , "view/:path": this.onItemView.bind( this )
+          , "field": this.onField.bind( this )
+          , "field/:path": this.onField.bind( this )
+          //, "type": this.setPath.bind( this, "type" )
+          , "type/new": this.onTypeNew.bind( this )
+          , "type/:path": this.onTypeEdit.bind( this )
+        });
 
         return router;
     };
@@ -72,16 +77,6 @@ define(function (require)
         this.getMainView().setState({ path: path });
     };
 
-    Application.prototype.onRecent = function()
-    {
-        this.setPath( "recent" );
-    };
-
-    Application.prototype.onConfig = function()
-    {
-        this.setPath( "config" );
-    };
-
     Application.prototype.onChange = function( change )
     {
         console.info( "change", change );
@@ -93,6 +88,7 @@ define(function (require)
         console.log( "genre", genre );
         this.getMainView().setState({ path: "genre", genre: genre });
     };
+
     Application.prototype.onItemView = function( id )
     {
         id = id && decodeURIComponent( id );
@@ -118,6 +114,19 @@ define(function (require)
               , docList: ItemList
             }
         });
+    };
+
+    Application.prototype.onTypeNew = function()
+    {
+        console.log( "type/new" );
+        this.getMainView().setState({ path: "type", data: { id: null } });
+    };
+
+    Application.prototype.onTypeEdit = function( id )
+    {
+        id = id && decodeURIComponent( id );
+        console.log( "type/edit", id );
+        this.getMainView().setState({ path: "type", data: { id: id } });
     };
 
     return Application;
