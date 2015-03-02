@@ -6,74 +6,271 @@ define( function( require )
       , Col             = require( "react-bootstrap/lib/Col" )
       , Input           = require( "react-bootstrap/lib/Input" )
       , PouchDB         = require( "pouchdb" )
+      , Router          = require( "director" )
+
+      , Type            = require( "../../model/Type" )
       ;
 
-    var fields = [
-        { key: "key", label: "Key", create: true, type: "text", placeholder: "Enter text" }
-      , { key: "name", label: "Name", type: "text", placeholder: "Enter text" }
-      , { key: "fields", label: "Fields", multiple: true, type: "text", placeholder: "Enter text" }
-    ];
+    var Field = React.PropTypes.shape({
+        key: React.PropTypes.string.isRequired
+      , type: React.PropTypes.string.isRequired
+      , label: React.PropTypes.string
+      , placeholder: React.PropTypes.string
+      , create: React.PropTypes.bool
+      , multiple: React.PropTypes.bool
+    });
 
     return React.createClass({
-        mixins: [ React.addons.LinkedStateMixin ]
-
-      , propTypes: {
+        propTypes: {
             db: React.PropTypes.instanceOf( PouchDB ).isRequired
-          , id: React.PropTypes.string
+          , router: React.PropTypes.instanceOf( Router ).isRequired
+          , doc: React.PropTypes.shape({
+                type: React.PropTypes.string.isRequired
+              , key: React.PropTypes.string
+            })
+          , dismissAfter: React.PropTypes.number
+          , Type: React.PropTypes.arrayOf( Field )
+        }
+
+      , getDefaultProps: function()
+        {
+            return {
+                dismissAfter: 2000
+              , Type: Type
+            };
         }
 
       , getInitialState: function()
         {
-            return { doc: {} };
+            return {
+                loading: false
+              , doc: null
+              , alert: null
+              , fields: Type
+            };
         }
 
       , componentWillMount: function()
         {
-            this.setId( this.props.id );
+            this.load( this.props.doc );
         }
 
       , componentWillReceiveProps: function( nextProps )
         {
-            this.setId( nextProps.id );
+            this.load( nextProps.doc );
         }
 
-      , setId: function( id )
+      , loading: function()
         {
-            this.replaceState({ loading: !!id });
-            if ( id )
-            {
-                this.props.db.get( "type/" + id )
-                    .then( this.setDoc )
-                    .catch( this.setError )
-                    .then( this.setState.bind( this, { loading: false } ) )
-                ;
-            }
+            this.setState({ loading: true });
         }
 
-      , setDoc: function( doc )
+      , loaded: function()
+        {
+            this.setState({ loading: false });
+        }
+
+      , loadedState: function( state )
         {
             if ( !this.isMounted() )
             {
                 return;
             }
 
-            this.setState({ doc: doc });
+            this.setState( state );
+        }
+
+      , load: function( doc )
+        {
+            var state = { doc: doc }
+              , load = Promise.resolve( state )
+              ;
+
+            if ( doc.key )
+            {
+                load = this.loadDoc( state );
+            }
+
+            load.then( this.loadFields )
+                .then( this.loadedState )
+                .catch( this.setError )
+                .then( this.loaded )
+            ;
+        }
+
+      , addValue: function( state, key, value )
+        {
+            state[key] = value;
+            return state;
+        }
+
+      , loadDoc: function( state )
+        {
+            var props = this.props;
+
+            this.loading();
+
+            return props.db.get( props.uri.id( state.doc ) )
+                .then( this.addValue.bind( this, state, "doc" ) )
+            ;
+        }
+
+      , loadFields: function( state )
+        {
+            var type = this.getType( state.doc );
+
+            if ( this.getType( this.state.doc ) !== type )
+            {
+                var load = Promise.resolve( this.props.Type );
+                if ( type !== "type" )
+                {
+                    this.loading();
+                    load = this.queryFields( type );
+                }
+                return load.then( this.addValue.bind( this, state, "fields" ) );
+            }
+
+            return state;
+        }
+
+      , queryFields: function( type )
+        {
+            var load = this.props.db.query( "fields", {
+                key: type
+              , include_docs: true
+            });
+
+            return load
+                .then( this.getRows )
+                .then( this.findMissingFields )
+                .then( this.getDocs )
+            ;
+        }
+
+      , setRoute: function( doc )
+        {
+            var props = this.props;
+            if ( doc._id !== props.uri.id( props ) )
+            {
+                props.router.setRoute( props.uri.edit( doc ) );
+            }
+        }
+
+      , save: function()
+        {
+            var props = this.props
+              , doc = this.state.doc
+              , docId = doc._id || props.uri.id( doc )
+              ;
+
+            this.loading();
+            props.db.put( doc, docId )
+                .then( this.setRoute )
+                .then( this.setState.bind( this, { alert: { bsStyle: "success", message: "Saved" } } ) )
+                .catch( this.setError )
+                .then( this.loaded )
+            ;
+        }
+
+      , getType: function( doc )
+        {
+            return doc && doc.type;
+        }
+
+        /**
+         * @param {Object} result
+         * @param {Array} result.rows
+         * @returns {Array} rows
+         */
+      , getRows: function( result )
+        {
+            return result.rows;
+        }
+
+      , findMissingFields: function( rows )
+        {
+            var missing = rows.filter( this.isDocMissing );
+
+            if ( missing.length )
+            {
+                throw new ReferenceError(
+                    "Can't load missing fields: " + missing.map( this.getReferenceId ).join( ", " )
+                );
+            }
+
+            return rows;
+        }
+
+      , isDocMissing: function( row )
+        {
+            return !this.getDoc( row );
+        }
+
+      , getReferenceId: function( row )
+        {
+            return row.value._id;
+        }
+
+      , getDocs: function( rows )
+        {
+            return rows.map( this.getDoc );
+        }
+
+        /**
+         * @param {Object} row
+         * @param {Mixed} result.doc
+         * @returns {Mixed} doc
+         */
+      , getDoc: function( row )
+        {
+            return row.doc;
         }
 
       , setError: function( error )
         {
             console.warn( error );
-            this.setState({ error: error });
+            this.setState({
+                alert: React.__spread({
+                    bsStyle: "warning"
+                  , dismissAfter: null
+                }, error )
+            });
         }
 
-      , clearError: function()
+      , clearAlert: function()
         {
-            this.setState({ error: null });
+            this.setState({ alert: null });
         }
 
       , getValue: function( field )
         {
-            return this.state.doc && this.state.doc[field.key] || field.defaultValue;
+            return this.state.doc && this.state.doc[field.key];
+        }
+
+      , setValue: function( field, index, value )
+        {
+            var doc = React.__spread( {}, this.state.doc );
+
+            if ( field.multiple )
+            {
+                var values = ( this.getValue( field ) || []).slice();
+
+                if ( index === null || values.length < index || index < 0)
+                {
+                    console.warn( "type.setValue Index out of bounds", index );
+                }
+
+                values[ index ] = value;
+
+                if ( !value )
+                {
+                    values.splice( index, 1 );
+                }
+
+                value = values;
+            }
+            doc[field.key] = value;
+            this.setState({ doc: doc });
         }
 
       , render: function()
@@ -81,25 +278,36 @@ define( function( require )
             return React.createElement(
                 "div"
               , null
-              , this.renderError()
+              , this.renderAlert( this.state.alert )
               , React.createElement(
                     "form"
-                  , { className: "form-horizontal" }
-                  , fields.map( this.renderField )
+                  , { className: "form-horizontal", onSubmit: this.onSubmit }
+                  , this.renderFields( this.state.fields )
+                  , React.createElement(
+                        Input
+                      , { type: "submit", value: "Save", wrapperClassName: "col-md-offset-2 col-sm-2" }
+                      , null
+                    )
                 )
             );
         }
 
-      , renderError: function()
+      , renderAlert: function( alert )
         {
-            var error = this.state.error;
-
-            return error && React.createElement(
+            return alert && React.createElement(
                 Alert
-              , { bsStyle: "warning", onDismiss: this.clearError }
-              , React.createElement( "h4", null, error.name )
-              , React.createElement( "p", null, error.reason )
+              , React.__spread({
+                    dismissAfter: this.props.dismissAfter
+                  , onDismiss: this.clearAlert
+                })
+              , alert.name && React.createElement( "h4", null, alert.name )
+              , alert.message && React.createElement( "p", null, alert.message )
             );
+        }
+
+      , renderFields: function( fields )
+        {
+            return fields && fields.map( this.renderField );
         }
 
       , renderField: function( field )
@@ -119,8 +327,8 @@ define( function( require )
               , React.__spread( {}, field, {
                     labelClassName: "col-sm-2"
                   , wrapperClassName: "col-sm-10"
-                  , valueLink: this.linkState( field.key )
-                  , type: this.props.id && field.create ? "static" : field.type
+                  , onChange: this.onChange.bind( this, field, null )
+                  , type: this.props.doc.key && field.create ? "static" : field.type
                   , value: this.getValue( field )
                 })
               , null
@@ -162,20 +370,13 @@ define( function( require )
 
       , onChange: function( field, index, event )
         {
-            var value = event.target.value
-              , values = ( this.getValue( field, index ) || []).slice()
-              ;
+            this.setValue( field, index, event.target.value );
+        }
 
-            values[ index ] = value;
-
-            if ( !value )
-            {
-                values.splice( index, 1 );
-            }
-
-            var state = {};
-            state[ field.key ] = values;
-            this.setState( state );
+      , onSubmit: function( event )
+        {
+            event.preventDefault();
+            this.save();
         }
     });
 });

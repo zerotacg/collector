@@ -27,7 +27,6 @@ define( function( require )
 
       , componentWillMount: function( props )
         {
-            console.log( "list.mount" );
             props = props || this.props;
             this.onChanges();
             this.changes = props.db.changes({
@@ -39,14 +38,12 @@ define( function( require )
 
       , componentWillUnmount: function()
         {
-            console.log( "list.unmount" );
             this.changes.cancel();
             this.changes = undefined;
         }
 
       , componentWillReceiveProps: function( nextProps )
         {
-            console.log( "list.receiveProps", this.props, nextProps );
             //this.setState({ items: [] });
             this.componentWillUnmount();
             this.componentWillMount( nextProps );
@@ -54,7 +51,6 @@ define( function( require )
 
       , render: function()
         {
-            console.log( "list.render", this.state.items );
             var items = this.state.items.map( this.renderItem );
 
             return React.createElement(
@@ -115,7 +111,6 @@ define( function( require )
                 include_docs: true
               , reduce: false
             }, this.props.query );
-            console.log( "list.query", options );
             this.props.db.query( this.props.view, options ).then( this.onData );
         }
 
@@ -126,7 +121,6 @@ define( function( require )
                 return;
             }
 
-            console.log( "list", this.isMounted(), result );
             var items = result.rows.map( function( row ) {
                 return row.doc;
             });

@@ -10,10 +10,6 @@ define(function (require)
       , ItemList    = require( "./view/item/List" )
       ;
 
-    var log_arguments = function( name ){
-        return function() { console.log( name, arguments ); };
-    };
-
     function Application()
     {
         this.config = new Config();
@@ -22,8 +18,9 @@ define(function (require)
         this.router = this.createRouter();
         var uri = this.uri = DocUri;
         uri.routes({
-            ":Barcode": "id"
+            ":type/:key": "id"
           , "#view/:_id": "view"
+          , "#:type/:key/edit": "edit"
           , "#genre(/:key)": "genre"
           , "#field(/*key)": "field"
         });
@@ -42,11 +39,11 @@ define(function (require)
           , "genre": this.setPath.bind( this, "genre" )
           , "genre/:genre": this.onGenre.bind( this )
           , "view/:path": this.onItemView.bind( this )
-          , "field": this.onField.bind( this )
-          , "field/:path": this.onField.bind( this )
+          //, "field": this.onField.bind( this )
+          //, "field/:path": this.onField.bind( this )
           //, "type": this.setPath.bind( this, "type" )
-          , "type/new": this.onTypeNew.bind( this )
-          , "type/:path": this.onTypeEdit.bind( this )
+          , ":path/new": this.onTypeNew.bind( this )
+          , ":path/:path/edit": this.onTypeEdit.bind( this )
         });
 
         return router;
@@ -59,6 +56,7 @@ define(function (require)
                 config: this.config
               , db: this.db
               , uri: this.uri
+              , router: this.router
             }, null )
           , document.body
         );
@@ -85,14 +83,12 @@ define(function (require)
     Application.prototype.onGenre = function( genre )
     {
         genre = genre && decodeURIComponent( genre );
-        console.log( "genre", genre );
         this.getMainView().setState({ path: "genre", genre: genre });
     };
 
     Application.prototype.onItemView = function( id )
     {
         id = id && decodeURIComponent( id );
-        console.log( "view", id );
         this.getMainView().setState({ path: "view", view: { id: id } });
     };
 
@@ -102,7 +98,6 @@ define(function (require)
         {
             key = decodeURIComponent( key).split( "/" );
         }
-        console.log( "field", key );
         this.getMainView().setState({
             path: "field"
           , field: {
@@ -116,17 +111,24 @@ define(function (require)
         });
     };
 
-    Application.prototype.onTypeNew = function()
+    Application.prototype.onTypeNew = function( type )
     {
         console.log( "type/new" );
-        this.getMainView().setState({ path: "type", data: { id: null } });
+        var doc = {
+            type: type && decodeURIComponent( type )
+          , key: null
+        };
+        this.getMainView().setState({ path: "type", doc: doc });
     };
 
-    Application.prototype.onTypeEdit = function( id )
+    Application.prototype.onTypeEdit = function( type, key )
     {
-        id = id && decodeURIComponent( id );
-        console.log( "type/edit", id );
-        this.getMainView().setState({ path: "type", data: { id: id } });
+        var doc = {
+            type: type && decodeURIComponent( type )
+            , key: key && decodeURIComponent( key )
+        };
+        console.log( "type/edit", type, key );
+        this.getMainView().setState({ path: "type", doc: doc  });
     };
 
     return Application;

@@ -33,7 +33,7 @@ define( function( require )
 
       , render: function()
         {
-            console.log( "main.render", this.state.path );
+            console.log( "main.render", this.state );
             return React.createElement(
                 Grid
               , null
@@ -188,7 +188,12 @@ define( function( require )
         {
             return React.createElement(
                 TypeView
-              , React.__spread( { db: this.props.db, uri: this.props.uri }, this.state.data )
+              , {
+                    db: this.props.db
+                  , uri: this.props.uri
+                  , router: this.props.router
+                  , doc: this.state.doc
+                }
               , null
             );
         }
