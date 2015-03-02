@@ -14,7 +14,7 @@ define( function( require )
       , getDefaultProps: function()
         {
             return {
-                view: "added"
+                view: "recent"
             };
         }
 

@@ -9,27 +9,27 @@ define( function( require )
       , Router          = require( "director" )
 
       , Type            = require( "../../model/Type" )
+      , Field           = require( "../../model/Field" )
       ;
 
-    var Field = React.PropTypes.shape({
-        key: React.PropTypes.string.isRequired
-      , type: React.PropTypes.string.isRequired
-      , label: React.PropTypes.string
-      , placeholder: React.PropTypes.string
-      , create: React.PropTypes.bool
-      , multiple: React.PropTypes.bool
-    });
+    var TYPE = "type"
+      , FIELD = "field"
+      , KEY = "key"
+      ;
+    var IdField = { key: "_id", type: "text", label: "_id", placeholder: "Enter text" }
+      , RevField = { key: "_rev", type: "static", label: "_rev" }
+      , TypeField = { key: TYPE, type: "static", label: "Type" }
+      ;
 
     return React.createClass({
         propTypes: {
             db: React.PropTypes.instanceOf( PouchDB ).isRequired
           , router: React.PropTypes.instanceOf( Router ).isRequired
           , doc: React.PropTypes.shape({
-                type: React.PropTypes.string.isRequired
-              , key: React.PropTypes.string
+                type: React.PropTypes.string
+              , _id: React.PropTypes.string
             })
           , dismissAfter: React.PropTypes.number
-          , Type: React.PropTypes.arrayOf( Field )
         }
 
       , getDefaultProps: function()
@@ -46,7 +46,7 @@ define( function( require )
                 loading: false
               , doc: null
               , alert: null
-              , fields: Type
+              , fields: null
             };
         }
 
@@ -86,7 +86,9 @@ define( function( require )
               , load = Promise.resolve( state )
               ;
 
-            if ( doc.key )
+            this.clearAlert();
+
+            if ( doc._id )
             {
                 load = this.loadDoc( state );
             }
@@ -110,7 +112,7 @@ define( function( require )
 
             this.loading();
 
-            return props.db.get( props.uri.id( state.doc ) )
+            return props.db.get( state.doc._id )
                 .then( this.addValue.bind( this, state, "doc" ) )
             ;
         }
@@ -121,12 +123,29 @@ define( function( require )
 
             if ( this.getType( this.state.doc ) !== type )
             {
-                var load = Promise.resolve( this.props.Type );
-                if ( type !== "type" )
+                var id = state.doc._id || "";
+                if ( id.substr(0, TYPE.length) === TYPE )
                 {
-                    this.loading();
-                    load = this.queryFields( type );
+                    type = TYPE;
                 }
+                if ( id.substr(0, FIELD.length) === FIELD )
+                {
+                    type = FIELD;
+                }
+
+                var load;
+                switch ( type ) {
+                    case TYPE:
+                        load = Promise.resolve( Type );
+                        break;
+                    case FIELD:
+                        load = Promise.resolve( Field );
+                        break;
+                    default:
+                        this.loading();
+                        load = this.queryFields( type );
+                }
+                load.then( console.log.bind( console, "fields") );
                 return load.then( this.addValue.bind( this, state, "fields" ) );
             }
 
@@ -147,29 +166,39 @@ define( function( require )
             ;
         }
 
-      , setRoute: function( doc )
-        {
-            var props = this.props;
-            if ( doc._id !== props.uri.id( props ) )
-            {
-                props.router.setRoute( props.uri.edit( doc ) );
-            }
-        }
-
       , save: function()
         {
             var props = this.props
               , doc = this.state.doc
-              , docId = doc._id || props.uri.id( doc )
               ;
 
+            this.clearAlert();
             this.loading();
-            props.db.put( doc, docId )
+
+            props.db.put( doc )
+                .then( this.updateDoc )
                 .then( this.setRoute )
                 .then( this.setState.bind( this, { alert: { bsStyle: "success", message: "Saved" } } ) )
                 .catch( this.setError )
                 .then( this.loaded )
             ;
+        }
+
+      , updateDoc: function( result )
+        {
+            var props = this.props;
+
+            var id = result.id
+              , rev = result.rev
+              ;
+
+            this.setValue( IdField, null, id );
+            this.setValue( RevField, null, rev );
+
+            if ( result.id !== props.doc._id )
+            {
+                window.location.assign( props.uri.edit({ _id: result.id }) );
+            }
         }
 
       , getType: function( doc )
@@ -193,9 +222,9 @@ define( function( require )
 
             if ( missing.length )
             {
-                throw new ReferenceError(
+                return Promise.reject( new ReferenceError(
                     "Can't load missing fields: " + missing.map( this.getReferenceId ).join( ", " )
-                );
+                ));
             }
 
             return rows;
@@ -230,10 +259,12 @@ define( function( require )
         {
             console.warn( error );
             this.setState({
-                alert: React.__spread({
+                alert: {
                     bsStyle: "warning"
                   , dismissAfter: null
-                }, error )
+                  , name: error.name
+                  , message: error.message
+                }
             });
         }
 
@@ -251,6 +282,11 @@ define( function( require )
         {
             var doc = React.__spread( {}, this.state.doc );
 
+            if ( value === "" )
+            {
+                value = undefined;
+            }
+
             if ( field.multiple )
             {
                 var values = ( this.getValue( field ) || []).slice();
@@ -262,19 +298,26 @@ define( function( require )
 
                 values[ index ] = value;
 
-                if ( !value )
+                if ( value === undefined )
                 {
                     values.splice( index, 1 );
                 }
 
-                value = values;
+                value = values.length ? values : undefined;
             }
             doc[field.key] = value;
+
+            if ( field.key === KEY )
+            {
+                doc._id = this.props.uri.id( doc );
+            }
+
             this.setState({ doc: doc });
         }
 
       , render: function()
         {
+            console.log( "type.render", this.state );
             return React.createElement(
                 "div"
               , null
@@ -282,6 +325,9 @@ define( function( require )
               , React.createElement(
                     "form"
                   , { className: "form-horizontal", onSubmit: this.onSubmit }
+                  , this.renderSingle( IdField )
+                  , this.renderSingle( RevField )
+                  , this.renderSingle( TypeField )
                   , this.renderFields( this.state.fields )
                   , React.createElement(
                         Input
@@ -299,7 +345,7 @@ define( function( require )
               , React.__spread({
                     dismissAfter: this.props.dismissAfter
                   , onDismiss: this.clearAlert
-                })
+                }, alert )
               , alert.name && React.createElement( "h4", null, alert.name )
               , alert.message && React.createElement( "p", null, alert.message )
             );
@@ -324,12 +370,13 @@ define( function( require )
         {
             return React.createElement(
                 Input
-              , React.__spread( {}, field, {
+              , React.__spread( { label: field.key }, field, {
                     labelClassName: "col-sm-2"
                   , wrapperClassName: "col-sm-10"
                   , onChange: this.onChange.bind( this, field, null )
-                  , type: this.props.doc.key && field.create ? "static" : field.type
+                  , type: this.props.doc._id && field.create ? "static" : field.type
                   , value: this.getValue( field )
+                  , checked: this.getValue( field )
                 })
               , null
             );
@@ -344,7 +391,7 @@ define( function( require )
                 Input
               , {
                     key: field.key
-                  , label: field.label
+                  , label: field.label || field.key
                   , labelClassName: "col-sm-2"
                 }
               , children
@@ -370,7 +417,8 @@ define( function( require )
 
       , onChange: function( field, index, event )
         {
-            this.setValue( field, index, event.target.value );
+            var value = field.type === "checkbox" ? event.target.checked : event.target.value;
+            this.setValue( field, index, value );
         }
 
       , onSubmit: function( event )

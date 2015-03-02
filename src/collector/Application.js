@@ -20,7 +20,7 @@ define(function (require)
         uri.routes({
             ":type/:key": "id"
           , "#view/:_id": "view"
-          , "#:type/:key/edit": "edit"
+          , "#:_id/edit": "edit"
           , "#genre(/:key)": "genre"
           , "#field(/*key)": "field"
         });
@@ -43,7 +43,7 @@ define(function (require)
           //, "field/:path": this.onField.bind( this )
           //, "type": this.setPath.bind( this, "type" )
           , ":path/new": this.onTypeNew.bind( this )
-          , ":path/:path/edit": this.onTypeEdit.bind( this )
+          , ":path/edit": this.onTypeEdit.bind( this )
         });
 
         return router;
@@ -113,22 +113,20 @@ define(function (require)
 
     Application.prototype.onTypeNew = function( type )
     {
-        console.log( "type/new" );
+        console.log( "type/new", type );
         var doc = {
             type: type && decodeURIComponent( type )
-          , key: null
         };
         this.getMainView().setState({ path: "type", doc: doc });
     };
 
-    Application.prototype.onTypeEdit = function( type, key )
+    Application.prototype.onTypeEdit = function( id )
     {
         var doc = {
-            type: type && decodeURIComponent( type )
-            , key: key && decodeURIComponent( key )
+            _id: id && decodeURIComponent( id )
         };
-        console.log( "type/edit", type, key );
-        this.getMainView().setState({ path: "type", doc: doc  });
+        console.log( "type/edit", id );
+        this.getMainView().setState({ path: "type", doc: doc });
     };
 
     return Application;
