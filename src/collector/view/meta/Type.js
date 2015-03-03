@@ -18,7 +18,7 @@ define( function( require )
       ;
     var IdField = { key: "_id", type: "text", label: "_id", placeholder: "Enter text" }
       , RevField = { key: "_rev", type: "static", label: "_rev" }
-      , TypeField = { key: TYPE, type: "static", label: "Type" }
+      , TypeField = { key: "type", type: "static", label: "Type" }
       ;
 
     return React.createClass({
@@ -137,9 +137,11 @@ define( function( require )
                 switch ( type ) {
                     case TYPE:
                         load = Promise.resolve( Type );
+                        state.doc.type = undefined;
                         break;
                     case FIELD:
                         load = Promise.resolve( Field );
+                        state.doc.type = undefined;
                         break;
                     default:
                         this.loading();
@@ -309,7 +311,7 @@ define( function( require )
 
             if ( field.key === KEY )
             {
-                doc._id = this.props.uri.id( doc );
+                doc._id = this.props.uri.id( React.__spread({}, doc, field.uri ) );
             }
 
             this.setState({ doc: doc });
@@ -366,17 +368,31 @@ define( function( require )
             return this.renderSingle( field );
         }
 
+      , validate: function( field, value )
+        {
+            if ( field.type === "text" && field.pattern )
+            {
+                var valid = !!((value || "").match( field.pattern ));
+                return valid ? "success" : field.validation || "error";
+            }
+        }
+
       , renderSingle: function( field )
         {
+            var value = this.getValue( field )
+              , bsStyle = this.validate( field, value )
+              ;
+
             return React.createElement(
                 Input
               , React.__spread( { label: field.key }, field, {
                     labelClassName: "col-sm-2"
                   , wrapperClassName: "col-sm-10"
                   , onChange: this.onChange.bind( this, field, null )
-                  , type: this.props.doc._id && field.create ? "static" : field.type
-                  , value: this.getValue( field )
-                  , checked: this.getValue( field )
+                  , value: value
+                  , checked: value
+                  , bsStyle: bsStyle
+                  , hasFeedback: !!bsStyle
                 })
               , null
             );
