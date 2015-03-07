@@ -53,10 +53,33 @@ define( function( require )
 
       , render: function()
         {
+            var doc = this.state.doc;
+
             return React.createElement(
-                "dl"
-              , { className: "dl-horizontal" }
-              , this.renderFields( this.state.doc )
+                "div"
+              , { className: "media" }
+              , React.createElement(
+                    "div"
+                  , { className: "media-left" }
+                  , React.createElement(
+                        "img"
+                      , { className: "media-object", height: 64, src: doc.Image }
+                    )
+                 )
+              , React.createElement(
+                    "div"
+                  , { className: "media-body" }
+                  , React.createElement(
+                        "h4"
+                      , { className: "media-heading" }
+                      , doc.Title
+                    )
+                  , React.createElement(
+                        "dl"
+                      , { className: "dl-horizontal" }
+                      , this.renderFields( doc )
+                    )
+                )
             );
         }
 

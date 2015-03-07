@@ -280,6 +280,12 @@ define( function( require )
             return this.state.doc && this.state.doc[field.key];
         }
 
+      , getArrayValue: function( field )
+        {
+            var value = this.getValue( field ) || [];
+            return Array.isArray( value ) ? value : [value];
+        }
+
       , setValue: function( field, index, value )
         {
             var doc = React.__spread( {}, this.state.doc );
@@ -291,7 +297,7 @@ define( function( require )
 
             if ( field.multiple )
             {
-                var values = ( this.getValue( field ) || []).slice();
+                var values = this.getArrayValue( field ).slice();
 
                 if ( index === null || values.length < index || index < 0)
                 {
@@ -306,6 +312,10 @@ define( function( require )
                 }
 
                 value = values.length ? values : undefined;
+                if ( values.length === 1 )
+                {
+                    value = values[0];
+                }
             }
             doc[field.key] = value;
 
@@ -373,7 +383,7 @@ define( function( require )
             if ( field.type === "text" && field.pattern )
             {
                 var valid = !!((value || "").match( field.pattern ));
-                return valid ? "success" : field.validation || "error";
+                return valid ? "success" : "error";
             }
         }
 
@@ -400,7 +410,7 @@ define( function( require )
 
       , renderMultiple: function( field )
         {
-            var children = ( this.getValue( field ) || [] ).map( this.renderInput.bind( this, field ) );
+            var children = this.getArrayValue( field ).map( this.renderInput.bind( this, field ) );
             children.push( this.renderInput( field, null, children.length ) );
 
             return React.createElement(

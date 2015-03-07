@@ -8,7 +8,6 @@ define( function( require )
       , { key: "label", label: "Label", type: "text", placeholder: "Enter text" }
       , { key: "placeholder", label: "Placeholder", type: "text", placeholder: "Enter text" }
       , { key: "pattern", label: "Pattern", type: "text", placeholder: "Enter text" }
-      , { key: "validation", label: "Validation", type: "select", options: ["warning", "error"] }
       , { key: "multiple", label: "Multiple", type: "checkbox" }
     ];
 });

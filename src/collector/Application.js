@@ -39,10 +39,10 @@ define(function (require)
           , "genre": this.setPath.bind( this, "genre" )
           , "genre/:genre": this.onGenre.bind( this )
           , "view/:path": this.onItemView.bind( this )
-          //, "field": this.onField.bind( this )
-          //, "field/:path": this.onField.bind( this )
+          , "field": this.onField.bind( this )
+          , "field/:path": this.onField.bind( this )
           //, "type": this.setPath.bind( this, "type" )
-          , ":path/new": this.onTypeNew.bind( this )
+          , "new/:path": this.onTypeNew.bind( this )
           , ":path/edit": this.onTypeEdit.bind( this )
         });
 

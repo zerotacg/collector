@@ -42,7 +42,7 @@ define( function( require )
             return React.createElement(
                 "li"
               , { key: index, className: "media" }
-              , React.createElement(
+              , doc.Image && React.createElement(
                     "div"
                   , { className: "media-left" }
                   , this.renderAnchor( doc, this.renderImage( doc.Image ) )
@@ -59,7 +59,7 @@ define( function( require )
         {
             return React.createElement(
                 "a"
-              , { href: this.props.uri.view( doc ) }
+              , { href: this.props.uri.edit( doc ) }
               , child
             );
         }
