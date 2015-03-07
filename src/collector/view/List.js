@@ -82,7 +82,7 @@ define( function( require )
         {
             return React.createElement(
                 "a"
-              , { href: this.props.uri.edit( item ) }
+              , { href: this.props.uri.view( item ) }
               , child
             );
         }

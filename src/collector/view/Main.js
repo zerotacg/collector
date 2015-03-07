@@ -35,10 +35,14 @@ define( function( require )
         {
             console.log( "main.render", this.state );
             return React.createElement(
-                Grid
+                "div"
               , null
               , this.renderNavigation()
-              , this.renderView()
+              , React.createElement(
+                    Grid
+                  , { fluid: false }
+                  , this.renderView()
+                )
             );
         }
 
@@ -51,7 +55,7 @@ define( function( require )
 
             return React.createElement(
                 Navbar
-              , { brand: this.renderBrand() }
+              , { brand: this.renderBrand(), fixedTop: true }
               , React.createElement(
                     Nav
                   , { activeKey: this.state.path }

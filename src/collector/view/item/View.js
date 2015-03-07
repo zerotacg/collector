@@ -1,7 +1,10 @@
 define( function( require )
 {   "use strict";
 
-    var React = require( "react" );
+    var React       = require( "react" )
+      , Button      = require( "react-bootstrap/lib/Button" )
+      , Glyphicon   = require( "react-bootstrap/lib/Glyphicon" )
+      ;
 
     return React.createClass({
         propTypes: {
@@ -28,7 +31,7 @@ define( function( require )
         {
             console.log( "view.mount" );
             props = props || this.props;
-            this.onChanges();
+            this.onChanges( props );
             this.changes = props.db.changes({
                 live: true
               , doc_ids: [ props.id ]
@@ -46,9 +49,8 @@ define( function( require )
       , componentWillReceiveProps: function( nextProps )
         {
             console.log( "view.receiveProps", this.props, nextProps );
-            //this.setState({ items: [] });
-            //this.componentWillUnmount();
-            //this.componentWillMount( nextProps );
+            this.componentWillUnmount();
+            this.componentWillMount( nextProps );
         }
 
       , render: function()
@@ -73,6 +75,11 @@ define( function( require )
                         "h4"
                       , { className: "media-heading" }
                       , doc.Title
+                      , React.createElement(
+                            Button
+                          , { href: this.props.uri.edit( doc ) }
+                          , React.createElement( Glyphicon, { glyph: "edit" } )
+                        )
                     )
                   , React.createElement(
                         "dl"
@@ -100,9 +107,9 @@ define( function( require )
             }, []);
         }
 
-      , onChanges: function()
+      , onChanges: function( props )
         {
-            var props = this.props;
+            props = props || this.props;
             props.db.get( props.id, { rev: props.rev } ).then( this.onData );
         }
 

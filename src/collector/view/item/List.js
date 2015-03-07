@@ -59,7 +59,7 @@ define( function( require )
         {
             return React.createElement(
                 "a"
-              , { href: this.props.uri.edit( doc ) }
+              , { href: this.props.uri.view( doc ) }
               , child
             );
         }

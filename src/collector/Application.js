@@ -20,7 +20,7 @@ define(function (require)
         uri.routes({
             ":type/:key": "id"
           , "#view/:_id": "view"
-          , "#:_id/edit": "edit"
+          , "#edit/:_id": "edit"
           , "#genre(/:key)": "genre"
           , "#field(/*key)": "field"
         });
@@ -43,7 +43,7 @@ define(function (require)
           , "field/:path": this.onField.bind( this )
           //, "type": this.setPath.bind( this, "type" )
           , "new/:path": this.onTypeNew.bind( this )
-          , ":path/edit": this.onTypeEdit.bind( this )
+          , "edit/:path": this.onTypeEdit.bind( this )
         });
 
         return router;
