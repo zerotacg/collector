@@ -54,7 +54,7 @@ define( function( require )
               , options = this.changesOptions( props )
               ;
             this.cancelChanges();
-            this.changes = db.changes( options ).on( "change", this.onChanges );
+            this.changes = db.changes( options ).on( "paused", this.onChanges );
         }
 
       , changesOptions: function( props )
@@ -75,8 +75,14 @@ define( function( require )
             }
         }
 
+      , getDoc: function( row )
+        {
+            return row.doc;
+        }
+
       , onChanges: function()
         {
+            console.log( "database_mixin.onChanges", arguments );
             this.queryDB( this.props );
         }
 

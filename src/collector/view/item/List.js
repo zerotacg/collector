@@ -45,12 +45,12 @@ define( function( require )
               , doc.Image && React.createElement(
                     "div"
                   , { className: "media-left" }
-                  , this.renderAnchor( doc, this.renderImage( doc.Image ) )
+                  , this.renderAnchor( doc, this.renderImage( doc.image ) )
                 )
               , React.createElement(
                     "div"
                   , { className: "media-body" }
-                  , this.renderAnchor( doc, this.renderHeading( doc.Title ) )
+                  , this.renderAnchor( doc, this.renderHeading( doc.name ) )
                 )
             );
         }

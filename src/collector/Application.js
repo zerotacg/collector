@@ -14,7 +14,7 @@ define(function (require)
     {
         this.config = new Config();
         var db = this.db = collector;
-        db.changes({ live: true, since: "now" }).on( "change", this.onChange.bind( this ) );
+        db.changes({ live: true, since: "now" }).on( "paused", this.onChange.bind( this ) );
         this.router = this.createRouter();
         var uri = this.uri = DocUri;
         uri.routes({
@@ -47,6 +47,7 @@ define(function (require)
           , "edit/:path": this.onTypeEdit.bind( this )
           , "browse": this.onBrowse.bind( this )
           , "browse/:path": this.onBrowse.bind( this )
+          , "clear": this.onClear.bind( this )
         });
 
         return router;
@@ -104,7 +105,7 @@ define(function (require)
         this.getMainView().setState({
             path: "field"
           , field: {
-                view: "field"
+                view: "values"
               , viewKey: key
               , db: this.db
               , uri: this.uri
@@ -138,6 +139,12 @@ define(function (require)
         var paths = path && path.split( "/" ) || [];
         console.log( "browse", path, paths );
         this.getMainView().setState({ path: "browse", data: { paths: paths } });
+    };
+
+    Application.prototype.onClear = function()
+    {
+        this.db.destroy();
+        this.config.db.destroy();
     };
 
     return Application;

@@ -21,7 +21,7 @@ define( function( require )
       , componentWillMount: function()
         {
             this.onChanges();
-            this.changes = this.props.config.db.changes({ live: true, since: "now" }).on( "change", this.onChanges );
+            this.changes = this.props.config.db.changes({ live: true, since: "now" }).on( "paused", this.onChanges );
         }
 
       , componentWillUnmount: function()

@@ -32,7 +32,7 @@ define( function( require )
                 live: true
               , view: "genre"
               , since: "now"
-            }).on( "change", this.onChanges );
+            }).on( "paused", this.onChanges );
         }
 
       , componentWillUnmount: function()

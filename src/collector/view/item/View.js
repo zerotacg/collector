@@ -36,7 +36,7 @@ define( function( require )
                 live: true
               , doc_ids: [ props.id ]
               , since: "now"
-            }).on( "change", this.onChanges );
+            }).on( "paused", this.onChanges );
         }
 
       , componentWillUnmount: function()
@@ -65,7 +65,7 @@ define( function( require )
                   , { className: "media-left" }
                   , React.createElement(
                         "img"
-                      , { className: "media-object", height: 64, src: doc.Image }
+                      , { className: "media-object", height: 64, src: doc.image }
                     )
                  )
               , React.createElement(
@@ -74,7 +74,7 @@ define( function( require )
                   , React.createElement(
                         "h4"
                       , { className: "media-heading" }
-                      , doc.Title
+                      , doc.name
                       , React.createElement(
                             Button
                           , { href: this.props.uri.edit( doc ) }
