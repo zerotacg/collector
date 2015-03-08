@@ -13,6 +13,7 @@ define( function( require )
       , Genre       = require( "./Genre" )
       , Database    = require( "./../list/Database" )
       , List        = require( "./List" )
+      , Tree        = require( "./Tree" )
       , ItemView    = require( "./item/View" )
       , TypeView    = require( "./meta/Type" )
       ;
@@ -63,6 +64,11 @@ define( function( require )
                         NavItem
                       , { href: "#recent", eventKey: "recent" }
                       , "Recent"
+                    )
+                  , React.createElement(
+                        NavItem
+                      , { href: "#browse", eventKey: "browse" }
+                      , "Browse"
                     )
                   , React.createElement(
                         NavItem
@@ -184,6 +190,15 @@ define( function( require )
             return React.createElement(
                 ItemView
               , React.__spread( { db: this.props.db, uri: this.props.uri }, this.state.view )
+              , null
+            );
+        }
+
+      , render_browse: function()
+        {
+            return React.createElement(
+                Tree
+              , React.__spread( { db: this.props.db, uri: this.props.uri }, this.state.data )
               , null
             );
         }

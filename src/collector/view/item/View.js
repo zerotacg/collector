@@ -107,9 +107,9 @@ define( function( require )
             }, []);
         }
 
-      , onChanges: function( props )
+      , onChanges: function()
         {
-            props = props || this.props;
+            var props = this.props;
             props.db.get( props.id, { rev: props.rev } ).then( this.onData );
         }
 

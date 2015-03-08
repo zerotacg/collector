@@ -23,6 +23,7 @@ define(function (require)
           , "#edit/:_id": "edit"
           , "#genre(/:key)": "genre"
           , "#field(/*key)": "field"
+          , "#browse(/*paths)": "browse"
         });
     }
 
@@ -44,6 +45,8 @@ define(function (require)
           //, "type": this.setPath.bind( this, "type" )
           , "new/:path": this.onTypeNew.bind( this )
           , "edit/:path": this.onTypeEdit.bind( this )
+          , "browse": this.onBrowse.bind( this )
+          , "browse/:path": this.onBrowse.bind( this )
         });
 
         return router;
@@ -127,6 +130,14 @@ define(function (require)
         };
         console.log( "type/edit", id );
         this.getMainView().setState({ path: "type", doc: doc });
+    };
+
+    Application.prototype.onBrowse = function( path )
+    {
+        path = path && decodeURIComponent( path );
+        var paths = path && path.split( "/" ) || [];
+        console.log( "browse", path, paths );
+        this.getMainView().setState({ path: "browse", data: { paths: paths } });
     };
 
     return Application;
