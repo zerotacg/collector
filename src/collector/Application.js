@@ -37,7 +37,7 @@ define(function (require)
         router.mount({
             "recent": this.setPath.bind( this, "recent" )
           , "config": this.setPath.bind( this, "config" )
-          , "genre": this.setPath.bind( this, "genre" )
+          , "genre": this.onGenre.bind( this )
           , "genre/:genre": this.onGenre.bind( this )
           , "view/:path": this.onItemView.bind( this )
           , "field": this.onField.bind( this )
@@ -47,6 +47,7 @@ define(function (require)
           , "edit/:path": this.onTypeEdit.bind( this )
           , "browse": this.onBrowse.bind( this )
           , "browse/:path": this.onBrowse.bind( this )
+          , "add/:barcode": this.onAdd.bind( this )
           , "clear": this.onClear.bind( this )
         });
 
@@ -139,6 +140,15 @@ define(function (require)
         var paths = path && path.split( "/" ) || [];
         console.log( "browse", path, paths );
         this.getMainView().setState({ path: "browse", data: { paths: paths } });
+    };
+
+    Application.prototype.onAdd = function( barcode )
+    {
+        barcode = barcode && decodeURIComponent( barcode );
+        this.db.put({ _id: barcode, added: (new Date()).toJSON() })
+            .then( console.log.bind( console, "added" ) )
+            .catch( console.log.bind( console, "added.error" ) )
+        ;
     };
 
     Application.prototype.onClear = function()

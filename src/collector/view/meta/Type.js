@@ -137,11 +137,9 @@ define( function( require )
                 switch ( type ) {
                     case TYPE:
                         load = Promise.resolve( Type );
-                        state.doc.type = undefined;
                         break;
                     case FIELD:
                         load = Promise.resolve( Field );
-                        state.doc.type = undefined;
                         break;
                     default:
                         this.loading();
@@ -395,11 +393,12 @@ define( function( require )
 
             return React.createElement(
                 Input
-              , React.__spread( { label: field.key }, field, {
+              , React.__spread( { label: field.key }, field, field.props, {
                     labelClassName: "col-sm-2"
                   , wrapperClassName: "col-sm-10"
                   , onChange: this.onChange.bind( this, field, null )
                   , value: value
+                  , name: field.key
                   , checked: value
                   , bsStyle: bsStyle
                   , hasFeedback: !!bsStyle
@@ -432,7 +431,7 @@ define( function( require )
               , { key: index, sm: 10, smOffset: offset }
               , React.createElement(
                     "input"
-                  , React.__spread({}, field, {
+                  , React.__spread({}, field, field.props, {
                         className: "form-control"
                       , value: value
                       , onChange: this.onChange.bind( this, field, index )

@@ -133,10 +133,6 @@ define( function( require )
                   , uri: this.props.uri
                   , key: "added"
                   , view: "added"
-                  , query: {
-                        descending: true
-                      , limit: 10
-                    }
                 }
               , null
             );
@@ -164,7 +160,8 @@ define( function( require )
                       , uri: this.props.uri
                       , key: "genre"
                       , view: "genre"
-                      , query: { key: genre }
+                      , viewKey: genre
+                      , limit: null
                     }
                   , null
                 );

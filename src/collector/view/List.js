@@ -13,6 +13,7 @@ define( function( require )
                 view: React.PropTypes.func.isRequired
             }).isRequired
           , view: React.PropTypes.string.isRequired
+          , viewKey: React.PropTypes.string
           , limit: React.PropTypes.number
         }
 
@@ -23,6 +24,7 @@ define( function( require )
               , reduce: false
               , descending: true
               , limit: props.limit
+              , key: props.viewKey
             };
         }
 

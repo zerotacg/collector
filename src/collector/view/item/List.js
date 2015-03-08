@@ -42,7 +42,7 @@ define( function( require )
             return React.createElement(
                 "li"
               , { key: index, className: "media" }
-              , doc.Image && React.createElement(
+              , doc.image && React.createElement(
                     "div"
                   , { className: "media-left" }
                   , this.renderAnchor( doc, this.renderImage( doc.image ) )
