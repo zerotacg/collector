@@ -28,6 +28,6 @@ define( function( require )
       ;
 
     app.init();
-    app.db.sync("http://localhost:5984/collector", { live: true, retry: true });
-    app.config.db.sync("http://localhost:5984/collector-config", { live: true, retry: true });
+    app.db.sync("http://192.168.0.19:5984/collector", { live: true, retry: true });
+    app.config.db.sync("http://192.168.0.19:5984/collector-config", { live: true, retry: true });
 });

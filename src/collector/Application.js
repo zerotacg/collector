@@ -145,9 +145,13 @@ define(function (require)
     Application.prototype.onAdd = function( barcode )
     {
         barcode = barcode && decodeURIComponent( barcode );
-        this.db.put({ _id: barcode, added: (new Date()).toJSON() })
+        var doc = { _id: barcode, added: (new Date()).toJSON() };
+        this.db.put( doc )
             .then( console.log.bind( console, "added" ) )
             .catch( console.log.bind( console, "added.error" ) )
+            .then( function() {
+                window.location.assign( this.uri.edit( doc ) );
+            }.bind( this ))
         ;
     };
 

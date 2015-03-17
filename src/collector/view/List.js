@@ -32,7 +32,7 @@ define( function( require )
         {
             return {
                 view: "recent"
-              , limit: 10
+              , limit: 25
             };
         }
 
