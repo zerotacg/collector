@@ -7,9 +7,10 @@
         "test": "test"
     },
     "scripts": {
-        "test": "mocha",
-        "postinstall": "npm run build",
-        "build": "browserify --require docuri --standalone DocUri --outfile build/docuri.js"
+        "test": "mocha"
+      , "postinstall": "npm run build"
+      , "build": "browserify --require docuri --standalone DocUri --outfile build/docuri.js"
+      , "preversion": "npm test"
     },
     "repository": {
         "type": "git",
