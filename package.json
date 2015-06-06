@@ -1,27 +1,27 @@
 {
-    "name": "collector",
-    "version": "0.0.0",
-    "description": "",
-    "main": "index.js",
-    "directories": {
-        "test": "test"
-    },
-    "scripts": {
-        "test": "mocha"
-      , "postinstall": "npm run build"
-      , "build": "browserify --require docuri --standalone DocUri --outfile build/docuri.js"
-      , "preversion": "npm test"
-    },
-    "repository": {
-        "type": "git",
-        "url": "zero@gaia:~/git/www-collector.git"
-    },
-    "author": "Tobias Peters <tobias.peters@kreativeffekt.at>",
-    "private": true,
-    "license": "MIT",
-    "devDependencies": {
-        "mocha": "~2.1.0",
-        "docuri": "~4.0.2",
-        "browserify": "~9.0.3"
-    }
+  "name": "collector",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha",
+    "postinstall": "npm run build",
+    "build": "browserify --require docuri --standalone DocUri --outfile build/docuri.js",
+    "preversion": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "zero@gaia:~/git/www-collector.git"
+  },
+  "author": "Tobias Peters <tobias.peters@kreativeffekt.at>",
+  "private": true,
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "~2.1.0",
+    "docuri": "~4.0.2",
+    "browserify": "~9.0.3"
+  }
 }
