@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "mocha",
-    "postinstall": "npm run build",
+    "postinstall": "bower install && npm run build",
     "build": "browserify --require docuri --standalone DocUri --outfile build/docuri.js",
     "preversion": "npm test"
   },
@@ -22,6 +22,7 @@
   "devDependencies": {
     "mocha": "~2.1.0",
     "docuri": "~4.0.2",
-    "browserify": "~9.0.3"
+    "browserify": "~9.0.3",
+    "jspm": "~0.15.7"
   }
 }
