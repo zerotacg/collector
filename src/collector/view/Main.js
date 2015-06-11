@@ -11,7 +11,7 @@ define( function( require )
 
       , Config      = require( "./config/Config" )
       , Genre       = require( "./Genre" )
-      , Database    = require( "./../list/Database" )
+      , Database    = require( "../list/Database" )
       , List        = require( "./List" )
       , Tree        = require( "./Tree" )
       , ItemView    = require( "./item/View" )
