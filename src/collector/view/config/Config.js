@@ -1,21 +1,17 @@
-define( function( require )
-{   "use strict";
+import React from "react";
+import { PageHeader } from "react-bootstrap";
 
-    var React       = require( "react" )
-      , PageHeader  = require( "react-bootstrap/lib/PageHeader" )
+import Sync from "./sync/Sync";
 
-      , Sync        = require( "./sync/Sync" )
-      ;
-
-    return React.createClass({
-        render: function()
-        {
-            return React.createElement(
-                "div"
-              , null
-              , React.createElement( PageHeader, null, "Config" )
-              , React.createElement( Sync, { config: this.props.config }, null )
-            );
-        }
-    });
-});
+export default class extends React.Component
+{
+    render()
+    {
+        return React.createElement(
+            "div"
+          , null
+          , React.createElement( PageHeader, null, "Config" )
+          , React.createElement( Sync, { config: this.props.config }, null )
+        );
+    }
+}

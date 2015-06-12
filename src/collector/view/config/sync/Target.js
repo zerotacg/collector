@@ -1,10 +1,5 @@
-define( function( require )
-{   "use strict";
+import React from "react";
 
-    var React   = require( "react" )
-      ;
-
-    return React.PropTypes.shape({
-        url: React.PropTypes.string
-    });
+export default React.PropTypes.shape({
+    url: React.PropTypes.string
 });

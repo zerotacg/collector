@@ -1,29 +1,28 @@
-define(function (require)
-{   "use strict";
+import PouchDB from "pouchdb";
 
-    var PouchDB = require( "pouchdb" );
-
-    function Config()
+export default class Config
+{
+    constructor()
     {
         this.db = new PouchDB( "collector-config" );
     }
 
-    Config.prototype.init = function()
+    init()
     {
-    };
+    }
 
-    Config.prototype.addTarget = function( target )
+    addTarget( target )
     {
         target.type = "config.sync.target";
         this.db.post( target );
-    };
+    }
 
-    Config.prototype.removeTarget = function( target )
+    removeTarget( target )
     {
         this.db.remove( target );
-    };
+    }
 
-    Config.prototype.targets = function()
+    targets()
     {
         return this.db.allDocs({ include_docs: true })
             .then( function( result ) {
@@ -32,7 +31,5 @@ define(function (require)
                 });
             })
         ;
-    };
-
-    return Config;
-});
+    }
+}

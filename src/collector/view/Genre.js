@@ -1,83 +1,76 @@
-define( function( require )
-{   "use strict";
+import React from  "react";
+import { Badge, ListGroup, ListGroupItem } from "react-bootstrap";
 
-    var React           = require( "react" )
-      , Badge           = require( "react-bootstrap/lib/Badge" )
-      , ListGroup       = require( "react-bootstrap/lib/ListGroup" )
-      , ListGroupItem   = require( "react-bootstrap/lib/ListGroupItem" )
-      ;
+export default class Genre extends React.Component
+{
+    constructor( props )
+    {
+        super( props );
 
-    return React.createClass({
-        getDefaultProps: function()
-        {
-            return {
-                query: {
-                    group: true
-                  , group_level: 1
-                }
-            };
-        }
+        this.state = {
+            items: []
+        };
+    }
 
-      , getInitialState: function()
-        {
-            return {
-                items: []
-            };
-        }
+    componentWillMount()
+    {
+        this.onChanges();
+        this.changes = this.props.db.changes({
+            live: true
+          , view: "genre"
+          , since: "now"
+        }).on( "paused", this.onChanges );
+    }
 
-      , componentWillMount: function()
-        {
-            this.onChanges();
-            this.changes = this.props.db.changes({
-                live: true
-              , view: "genre"
-              , since: "now"
-            }).on( "paused", this.onChanges );
-        }
+    componentWillUnmount()
+    {
+        this.changes.cancel();
+        this.changes = undefined;
+    }
 
-      , componentWillUnmount: function()
-        {
-            this.changes.cancel();
-            this.changes = undefined;
-        }
+    render()
+    {
+        return React.createElement(
+            ListGroup
+          , null
+          , this.state.items.map( this.renderRow )
+        );
+    }
 
-      , render: function()
-        {
-            return React.createElement(
-                ListGroup
+    renderRow( row )
+    {
+        row.key = row.key || "None";
+        row.href = this.props.uri.genre( row );
+
+        return React.createElement(
+            ListGroupItem
+          , row
+          , React.createElement(
+                Badge
               , null
-              , this.state.items.map( this.renderRow )
-            );
-        }
+              , row.value
+            )
+          , row.key
+        );
+    }
 
-      , renderRow: function( row )
-        {
-            row.key = row.key || "None";
-            row.href = this.props.uri.genre( row );
+    onChanges()
+    {
+        this.props.db.query( "genre", this.props.query ).then( this.onGenres );
+    }
 
-            return React.createElement(
-                ListGroupItem
-              , row
-              , React.createElement(
-                    Badge
-                  , null
-                  , row.value
-                )
-              , row.key
-            );
-        }
+    onGenres( result )
+    {
+        var items = result.rows.map( function( row ) {
+            return row;
+        });
+        this.setState({ items: items });
+    }
+}
 
-      , onChanges: function()
-        {
-            this.props.db.query( "genre", this.props.query ).then( this.onGenres );
-        }
-
-      , onGenres: function( result )
-        {
-            var items = result.rows.map( function( row ) {
-                return row;
-            });
-            this.setState({ items: items });
-        }
-    });
-});
+Genre.defaultProps = {
+    query: {
+        group: true
+      , group_level: 1
+    }
+};

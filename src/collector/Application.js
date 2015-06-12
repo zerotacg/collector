@@ -1,16 +1,14 @@
-define(function (require)
-{   "use strict";
+import DocUri       from "docuri";
+import React        from "react";
+import director     from "director";
+import Config       from "./controller/Config";
+import collector    from "./database/collector";
+import MainView     from "./view/Main";
+import ItemList     from "./view/item/List";
 
-    var DocUri      = require( "docuri" )
-      , React       = require( "react" )
-      , Router      = require( "director" )
-      , Config      = require( "./controller/Config")
-      , collector   = require( "./database/collector" )
-      , MainView    = require( "./view/Main" )
-      , ItemList    = require( "./view/item/List" )
-      ;
-
-    function Application()
+export default class Application
+{
+    constructor()
     {
         this.config = new Config();
         var db = this.db = collector;
@@ -27,9 +25,9 @@ define(function (require)
         });
     }
 
-    Application.prototype.createRouter = function()
+    createRouter()
     {
-        var router = new Router();
+        var router = new director.Router();
         router.configure({
             on: console.log.bind( console, "router" )
         });
@@ -52,9 +50,9 @@ define(function (require)
         });
 
         return router;
-    };
+    }
 
-    Application.prototype.init = function()
+    init()
     {
         this._main_view = React.render(
             React.createElement( MainView, {
@@ -67,37 +65,37 @@ define(function (require)
         );
         this.router.init();
         this.onChange();
-    };
+    }
 
-    Application.prototype.getMainView = function()
+    getMainView()
     {
         return this._main_view;
-    };
+    }
 
-    Application.prototype.setPath = function( path )
+    setPath( path )
     {
         console.log( "path", path );
         this.getMainView().setState({ path: path });
-    };
+    }
 
-    Application.prototype.onChange = function( change )
+    onChange( change )
     {
         console.info( "change", change );
-    };
+    }
 
-    Application.prototype.onGenre = function( genre )
+    onGenre( genre )
     {
         genre = genre && decodeURIComponent( genre );
         this.getMainView().setState({ path: "genre", genre: genre });
-    };
+    }
 
-    Application.prototype.onItemView = function( id )
+    onItemView( id )
     {
         id = id && decodeURIComponent( id );
         this.getMainView().setState({ path: "view", view: { id: id } });
-    };
+    }
 
-    Application.prototype.onField = function( key )
+    onField( key )
     {
         if ( key )
         {
@@ -114,35 +112,35 @@ define(function (require)
               , docList: ItemList
             }
         });
-    };
+    }
 
-    Application.prototype.onTypeNew = function( type )
+    onTypeNew( type )
     {
         console.log( "type/new", type );
         var doc = {
             type: type && decodeURIComponent( type )
         };
         this.getMainView().setState({ path: "type", doc: doc });
-    };
+    }
 
-    Application.prototype.onTypeEdit = function( id )
+    onTypeEdit( id )
     {
         var doc = {
             _id: id && decodeURIComponent( id )
         };
         console.log( "type/edit", id );
         this.getMainView().setState({ path: "type", doc: doc });
-    };
+    }
 
-    Application.prototype.onBrowse = function( path )
+    onBrowse( path )
     {
         path = path && decodeURIComponent( path );
         var paths = path && path.split( "/" ) || [];
         console.log( "browse", path, paths );
         this.getMainView().setState({ path: "browse", data: { paths: paths } });
-    };
+    }
 
-    Application.prototype.onAdd = function( barcode )
+    onAdd( barcode )
     {
         barcode = barcode && decodeURIComponent( barcode );
         var doc = { _id: barcode, added: (new Date()).toJSON() };
@@ -153,13 +151,11 @@ define(function (require)
                 window.location.assign( this.uri.edit( doc ) );
             }.bind( this ))
         ;
-    };
+    }
 
-    Application.prototype.onClear = function()
+    onClear()
     {
         this.db.destroy();
         this.config.db.destroy();
-    };
-
-    return Application;
-});
+    }
+}

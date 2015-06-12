@@ -1,95 +1,89 @@
-define( function( require )
-{   "use strict";
+import React from "react";
+import { ListGroup, ListGroupItem } from "react-bootstrap";
 
-    var React           = require( "react" )
-      , ListGroup       = require( "react-bootstrap/lib/ListGroup" )
-      , ListGroupItem   = require( "react-bootstrap/lib/ListGroupItem" )
+import DatabaseMixin from "../list/DatabaseMixin";
 
-      , DatabaseMixin   = require( "../list/DatabaseMixin" )
-      ;
+export default React.createClass({
+    mixins: [ DatabaseMixin ]
 
-    return React.createClass({
-        mixins: [ DatabaseMixin ]
+  , propTypes: {
+        view: React.PropTypes.string.isRequired
+      , paths: React.PropTypes.arrayOf(React.PropTypes.string.isRequired).isRequired
+    }
 
-      , propTypes: {
-            view: React.PropTypes.string.isRequired
-          , paths: React.PropTypes.arrayOf(React.PropTypes.string.isRequired).isRequired
-        }
+  , getDefaultProps: function()
+    {
+        return {
+            view: "tree"
+        };
+    }
 
-      , getDefaultProps: function()
-        {
-            return {
-                view: "tree"
-            };
-        }
-
-      , getInitialState: function()
-        {
-            return {
-                data: {
-                    rows: []
-                }
-            };
-        }
-
-      , render: function()
-        {
-            var props = this.props
-              , rows = this.state.data && this.state.data.rows || []
-              ;
-
-            return React.createElement(
-                ListGroup
-              , null
-              , rows.map( this.renderRow )
-            );
-        }
-
-      , renderRow: function( row, index )
-        {
-            var props = this.props
-              , paths = props.paths
-              , title = row.key[paths.length + 2]
-              , href
-              ;
-
-            if( row.value )
-            {
-                href = props.uri.browse({ paths: paths.concat( row.value.split( "/" ) ) });
+  , getInitialState: function()
+    {
+        return {
+            data: {
+                rows: []
             }
-            else
-            {
-                href = props.uri.view({ _id: row.id });
-            }
+        };
+    }
 
-            return React.createElement(
-                ListGroupItem
-              , { key: index, href: href }
-              , title
-            );
-        }
+  , render: function()
+    {
+        var props = this.props
+          , rows = this.state.data && this.state.data.rows || []
+          ;
 
+        return React.createElement(
+            ListGroup
+          , null
+          , rows.map( this.renderRow )
+        );
+    }
 
-      , endkey: function( startkey )
+  , renderRow: function( row, index )
+    {
+        var props = this.props
+          , paths = props.paths
+          , title = row.key[paths.length + 2]
+          , href
+          ;
+
+        if( row.value )
         {
-            if ( !startkey ) {
-                return;
-            }
-
-            var endkey = startkey.slice();
-            endkey.push({});
-            return endkey;
+            href = props.uri.browse({ paths: paths.concat( row.value.split( "/" ) ) });
         }
-
-      , queryOptions: function( props )
+        else
         {
-            var paths = props.paths
-              , key = [ paths.length ].concat( paths )
-              ;
-            return {
-                startkey: key
-              , endkey: this.endkey( key )
-            };
+            href = props.uri.view({ _id: row.id });
         }
-    });
+
+        return React.createElement(
+            ListGroupItem
+          , { key: index, href: href }
+          , title
+        );
+    }
+
+
+  , endkey: function( startkey )
+    {
+        if ( !startkey ) {
+            return;
+        }
+
+        var endkey = startkey.slice();
+        endkey.push({});
+        return endkey;
+    }
+
+  , queryOptions: function( props )
+    {
+        var paths = props.paths
+          , key = [ paths.length ].concat( paths )
+          ;
+        return {
+            startkey: key
+          , endkey: this.endkey( key )
+        };
+    }
 });

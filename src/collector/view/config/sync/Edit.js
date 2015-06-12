@@ -1,122 +1,114 @@
-define( function( require )
-{   "use strict";
+import React from "react";
+import { Input, PageHeader, Table } from "react-bootstrap";
 
-    var React       = require( "react" )
-      , Input       = require( "react-bootstrap/lib/Input" )
-      , PageHeader  = require( "react-bootstrap/lib/PageHeader" )
-      , Table       = require( "react-bootstrap/lib/Table" )
-      , Target      = require( "./Target" )
-      ;
+import Target from "./Target";
 
-    return React.createClass({
-        propTypes: {
-            value: Target
-          , onChange: React.PropTypes.func.isRequired
-          , onSubmit: React.PropTypes.func.isRequired
-        }
+export default class Edit extends React.Component
+{
+    render()
+    {
+        return React.createElement(
+            "form"
+          , { onSubmit: this.handleSubmit }
+          , this.renderUrl()
+          , this.renderLive()
+          , this.renderRetry()
+          , this.renderSubmit()
+        );
+    }
 
-      , getDefaultProps: function()
-        {
-            return {
-                value: {
-                    url: undefined
-                  , live: true
-                  , retry: true
-                }
-              , onChange: function(){}
-              , onSubmit: function(){}
-            };
-        }
+    renderUrl()
+    {
+        return React.createElement(
+            Input
+          , {
+                type: "text"
+              , value: this.props.value.url
+              , placeholder: "e.g. http://my.couch.db:5984/dbname"
+              , label: "Url"
+              , ref: "url"
+              , onChange: this.handleChange
+            }
+          , null
+        );
+    }
 
-      , render: function()
-        {
-            return React.createElement(
-                "form"
-              , { onSubmit: this.handleSubmit }
-              , this.renderUrl()
-              , this.renderLive()
-              , this.renderRetry()
-              , this.renderSubmit()
-            );
-        }
+    renderLive()
+    {
+        return React.createElement(
+            Input
+          , {
+                type: "checkbox"
+              , checked: this.props.value.live
+              , label: "Live"
+              , ref: "live"
+              , onChange: this.handleChange
+            }
+            , null
+        );
+    }
 
-      , renderUrl: function()
-        {
-            return React.createElement(
-                Input
-              , {
-                    type: "text"
-                  , value: this.props.value.url
-                  , placeholder: "e.g. http://my.couch.db:5984/dbname"
-                  , label: "Url"
-                  , ref: "url"
-                  , onChange: this.handleChange
-                }
-              , null
-            );
-        }
+    renderRetry()
+    {
+        return React.createElement(
+            Input
+          , {
+                type: "checkbox"
+              , checked: this.props.value.retry
+              , readOnly: !this.props.value.live
+              , label: "Retry"
+              , ref: "retry"
+              , onChange: this.handleChange
+            }
+          , null
+        );
+    }
 
-      , renderLive: function()
-        {
-            return React.createElement(
-                Input
-              , {
-                    type: "checkbox"
-                  , checked: this.props.value.live
-                  , label: "Live"
-                  , ref: "live"
-                  , onChange: this.handleChange
-                }
-                , null
-            );
-        }
+    renderSubmit()
+    {
+        return React.createElement(
+            Input
+          , {
+                type: "submit"
+              , value: "Add"
+            }
+          , null
+        );
+    }
 
-      , renderRetry: function()
-        {
-            return React.createElement(
-                Input
-              , {
-                    type: "checkbox"
-                  , checked: this.props.value.retry
-                  , readOnly: !this.props.value.live
-                  , label: "Retry"
-                  , ref: "retry"
-                  , onChange: this.handleChange
-                }
-              , null
-            );
-        }
+    getValue()
+    {
+        return {
+            url: this.refs.url.getValue()
+          , live: this.refs.live.getChecked()
+          , retry: this.refs.retry.getChecked()
+        };
+    }
 
-      , renderSubmit: function()
-        {
-            return React.createElement(
-                Input
-              , {
-                    type: "submit"
-                  , value: "Add"
-                }
-              , null
-            );
-        }
+    handleChange()
+    {
+        this.props.onChange( this.getValue() );
+    }
 
-      , getValue: function()
-        {
-            return {
-                url: this.refs.url.getValue()
-              , live: this.refs.live.getChecked()
-              , retry: this.refs.retry.getChecked()
-            };
-        }
+    handleSubmit( e )
+    {
+        e.preventDefault();
+        this.props.onSubmit( this.getValue() );
+    }
+}
 
-      , handleChange: function()
-        {
-            this.props.onChange( this.getValue() );
-        }
+Edit.propTypes = {
+    value: Target
+  , onChange: React.PropTypes.func.isRequired
+  , onSubmit: React.PropTypes.func.isRequired
+};
 
-      , handleSubmit: function( e )
-        {
-            e.preventDefault();
-            this.props.onSubmit( this.getValue() );
-        }
-    });
-});
+Edit.defaultProps = {
+    value: {
+        url: undefined
+      , live: true
+      , retry: true
+    }
+  , onChange: function(){}
+  , onSubmit: function(){}
+};

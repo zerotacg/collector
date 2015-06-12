@@ -1,130 +1,128 @@
-define( function( require )
-{   "use strict";
+import React from "react";
+import { PageHeader, Table } from "react-bootstrap";
 
-    var React       = require( "react" )
-      , PageHeader  = require( "react-bootstrap/lib/PageHeader" )
-      , Table       = require( "react-bootstrap/lib/Table" )
-      , Edit        = require( "./Edit" )
-      , Remove      = require( "./Remove" )
-      , Target      = require( "./Target" )
-      ;
+import Edit     from "./Edit";
+import Remove   from "./Remove";
+import Target   from "./Target";
 
-    return React.createClass({
-        getInitialState: function()
-        {
-            return {
-                target: undefined
-              , targets: []
-            };
-        }
+export default class extends React.Component
+{
+    constructor( props )
+    {
+        super( props );
 
-      , componentWillMount: function()
-        {
-            this.onChanges();
-            this.changes = this.props.config.db.changes({ live: true, since: "now" }).on( "paused", this.onChanges );
-        }
+        this.state = {
+            target: undefined
+          , targets: []
+        };
+    }
 
-      , componentWillUnmount: function()
-        {
-            this.changes.cancel();
-            this.changes = undefined;
-        }
+    componentWillMount()
+    {
+        this.onChanges();
+        this.changes = this.props.config.db.changes({ live: true, since: "now" }).on( "paused", this.onChanges );
+    }
 
-      , render: function()
-        {
-            return React.createElement(
-                "div"
+    componentWillUnmount()
+    {
+        this.changes.cancel();
+        this.changes = undefined;
+    }
+
+    render()
+    {
+        return React.createElement(
+            "div"
+          , null
+          , React.createElement(
+                PageHeader
               , null
+              , React.createElement( "small", null, "Sync" )
+            )
+          , this.edit()
+          , React.createElement(
+                Table
+              , { striped: true }
+              , this.thead()
+              , this.tbody()
+            )
+        );
+    }
+
+    edit()
+    {
+        return React.createElement(
+            Edit
+          , { onChange: this.onEdit, onSubmit: this.onAdd, value: this.state.target }
+          , null
+        );
+    }
+
+    thead()
+    {
+        return React.createElement(
+            "thead"
+          , null
+          , React.createElement(
+                "tr"
+              , null
+              , React.createElement( "th", null, null )
+              , React.createElement( "th", null, "Url" )
+            )
+        );
+    }
+
+    tbody()
+    {
+        var targets = this.state.targets.map( function( target, index ) {
+            return React.createElement(
+                "tr"
+              , { key: index }
               , React.createElement(
-                    PageHeader
+                    "td"
                   , null
-                  , React.createElement( "small", null, "Sync" )
-                )
-              , this.edit()
-              , React.createElement(
-                    Table
-                  , { striped: true }
-                  , this.thead()
-                  , this.tbody()
-                )
-            );
-        }
-
-      , edit: function()
-        {
-            return React.createElement(
-                Edit
-              , { onChange: this.onEdit, onSubmit: this.onAdd, value: this.state.target }
-              , null
-            );
-        }
-
-      , thead: function()
-        {
-            return React.createElement(
-                "thead"
-              , null
-              , React.createElement(
-                    "tr"
-                  , null
-                  , React.createElement( "th", null, null )
-                  , React.createElement( "th", null, "Url" )
-                )
-            );
-        }
-
-      , tbody: function()
-        {
-            var targets = this.state.targets.map( function( target, index ) {
-                return React.createElement(
-                    "tr"
-                  , { key: index }
                   , React.createElement(
-                        "td"
+                        Remove
+                      , { onClick: this.onRemove, value: index }
                       , null
-                      , React.createElement(
-                            Remove
-                          , { onClick: this.onRemove, value: index }
-                          , null
-                        )
                     )
-                  , React.createElement( "td", null, target.url )
-                );
-            }.bind( this ));
-            return React.createElement(
-                "tbody"
-              , null
-              , targets
+                )
+              , React.createElement( "td", null, target.url )
             );
-        }
+        }.bind( this ));
+        return React.createElement(
+            "tbody"
+          , null
+          , targets
+        );
+    }
 
-      , onEdit: function( target )
-        {
-            this.setState({ target: target });
-        }
+    onEdit( target )
+    {
+        this.setState({ target: target });
+    }
 
-      , onAdd: function( target )
-        {
-            this.setState({ targets: this.state.targets.concat([target]) });
-            this.props.config.addTarget( target );
-        }
+    onAdd( target )
+    {
+        this.setState({ targets: this.state.targets.concat([target]) });
+        this.props.config.addTarget( target );
+    }
 
-      , onRemove: function( index )
-        {
-            var targets = this.state.targets;
-            this.props.config.removeTarget( targets[index] );
+    onRemove( index )
+    {
+        var targets = this.state.targets;
+        this.props.config.removeTarget( targets[index] );
 
-            targets = targets.filter( function( value, key ) {
-                return key !== index;
-            });
+        targets = targets.filter( function( value, key ) {
+            return key !== index;
+        });
+        this.setState({ targets: targets });
+    }
+
+    onChanges()
+    {
+        this.props.config.targets().then( function( targets ) {
             this.setState({ targets: targets });
-        }
-
-      , onChanges: function()
-        {
-            this.props.config.targets().then( function( targets ) {
-                this.setState({ targets: targets });
-            }.bind( this ));
-        }
-    });
-});
+        }.bind( this ));
+    }
+}

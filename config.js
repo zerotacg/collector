@@ -4,8 +4,7 @@ System.config({
   "babelOptions": {
     "optional": [
       "runtime"
-    ],
-    "blacklist": []
+    ]
   },
   "paths": {
     "*": "*.js",
@@ -23,6 +22,7 @@ System.config({
     "docuri": "npm:docuri@4.1.1",
     "pouchdb": "github:pouchdb/pouchdb@3.6.0",
     "react": "npm:react@0.14.0-alpha3",
+    "react-bootstrap": "npm:react-bootstrap@0.24.0-alpha.1",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.3.0"
     },
@@ -72,8 +72,13 @@ System.config({
     },
     "npm:buffer@3.2.2": {
       "base64-js": "npm:base64-js@0.0.8",
-      "ieee754": "npm:ieee754@1.1.5",
+      "ieee754": "npm:ieee754@1.1.6",
       "is-array": "npm:is-array@1.0.1"
+    },
+    "npm:classnames@2.1.2": {
+      "assert": "github:jspm/nodelibs-assert@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.1",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.0"
     },
     "npm:core-js@0.9.16": {
       "fs": "github:jspm/nodelibs-fs@0.1.2",
@@ -115,6 +120,11 @@ System.config({
     },
     "npm:punycode@1.3.2": {
       "process": "github:jspm/nodelibs-process@0.1.1"
+    },
+    "npm:react-bootstrap@0.24.0-alpha.1": {
+      "classnames": "npm:classnames@2.1.2",
+      "process": "github:jspm/nodelibs-process@0.1.1",
+      "react": "npm:react@0.14.0-alpha3"
     },
     "npm:react@0.14.0-alpha3": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",

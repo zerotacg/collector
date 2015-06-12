@@ -1,127 +1,121 @@
-define( function( require )
-{   "use strict";
+import React from "react";
+import { Button, Glyphicon } from "react-bootstrap";
 
-    var React       = require( "react" )
-      , Button      = require( "react-bootstrap/lib/Button" )
-      , Glyphicon   = require( "react-bootstrap/lib/Glyphicon" )
-      ;
+export default class View extends React.Component
+{
+    constructor( props )
+    {
+        super( props );
 
-    return React.createClass({
-        propTypes: {
-            id: React.PropTypes.string.isRequired
-          , rev: React.PropTypes.string
-          , ignore: React.PropTypes.arrayOf( React.PropTypes.string).isRequired
-        }
+        this.state = {
+            doc: {}
+        };
+    }
 
-      , getDefaultProps: function()
-        {
-            return {
-                ignore: [ "_id", "_rev" ]
-            };
-        }
+    componentWillMount( props )
+    {
+        console.log( "view.mount" );
+        props = props || this.props;
+        this.onChanges( props );
+        this.changes = props.db.changes({
+            live: true
+          , doc_ids: [ props.id ]
+          , since: "now"
+        }).on( "paused", this.onChanges );
+    }
 
-      , getInitialState: function()
-        {
-            return {
-                doc: {}
-            };
-        }
+    componentWillUnmount()
+    {
+        console.log( "view.unmount" );
+        this.changes.cancel();
+        this.changes = undefined;
+    }
 
-      , componentWillMount: function( props )
-        {
-            console.log( "view.mount" );
-            props = props || this.props;
-            this.onChanges( props );
-            this.changes = props.db.changes({
-                live: true
-              , doc_ids: [ props.id ]
-              , since: "now"
-            }).on( "paused", this.onChanges );
-        }
+    componentWillReceiveProps( nextProps )
+    {
+        console.log( "view.receiveProps", this.props, nextProps );
+        this.componentWillUnmount();
+        this.componentWillMount( nextProps );
+    }
 
-      , componentWillUnmount: function()
-        {
-            console.log( "view.unmount" );
-            this.changes.cancel();
-            this.changes = undefined;
-        }
+    render()
+    {
+        var doc = this.state.doc;
 
-      , componentWillReceiveProps: function( nextProps )
-        {
-            console.log( "view.receiveProps", this.props, nextProps );
-            this.componentWillUnmount();
-            this.componentWillMount( nextProps );
-        }
-
-      , render: function()
-        {
-            var doc = this.state.doc;
-
-            return React.createElement(
+        return React.createElement(
+            "div"
+          , { className: "media" }
+          , React.createElement(
                 "div"
-              , { className: "media" }
+              , { className: "media-left" }
               , React.createElement(
-                    "div"
-                  , { className: "media-left" }
-                  , React.createElement(
-                        "img"
-                      , { className: "media-object", height: 64, src: doc.image }
-                    )
-                 )
+                    "img"
+                  , { className: "media-object", height: 64, src: doc.image }
+                )
+             )
+          , React.createElement(
+                "div"
+              , { className: "media-body" }
               , React.createElement(
-                    "div"
-                  , { className: "media-body" }
+                    "h4"
+                  , { className: "media-heading" }
+                  , doc.name
                   , React.createElement(
-                        "h4"
-                      , { className: "media-heading" }
-                      , doc.name
-                      , React.createElement(
-                            Button
-                          , { href: this.props.uri.edit( doc ) }
-                          , React.createElement( Glyphicon, { glyph: "edit" } )
-                        )
-                    )
-                  , React.createElement(
-                        "dl"
-                      , { className: "dl-horizontal" }
-                      , this.renderFields( doc )
+                        Button
+                      , { href: this.props.uri.edit( doc ) }
+                      , React.createElement( Glyphicon, { glyph: "edit" } )
                     )
                 )
-            );
-        }
+              , React.createElement(
+                    "dl"
+                  , { className: "dl-horizontal" }
+                  , this.renderFields( doc )
+                )
+            )
+        );
+    }
 
-      , renderFields: function( doc )
+    renderFields( doc )
+    {
+        var ignore = this.props.ignore;
+        var keys = Object.keys( doc )
+            .filter( function( key ) {
+                return ignore.indexOf( key ) === -1;
+            })
+        ;
+
+        return keys.reduce( function( children, key ) {
+            children.push( React.createElement( "dt", { key: "label-" + key }, key ) );
+            children.push( React.createElement( "dd", { key: "value-" + key }, doc[key] ) );
+
+            return children;
+        }, []);
+    }
+
+    onChanges()
+    {
+        var props = this.props;
+        props.db.get( props.id, { rev: props.rev } ).then( this.onData );
+    }
+
+    onData( doc )
+    {
+        if( !this.isMounted() )
         {
-            var ignore = this.props.ignore;
-            var keys = Object.keys( doc )
-                .filter( function( key ) {
-                    return ignore.indexOf( key ) === -1;
-                })
-            ;
-
-            return keys.reduce( function( children, key ) {
-                children.push( React.createElement( "dt", { key: "label-" + key }, key ) );
-                children.push( React.createElement( "dd", { key: "value-" + key }, doc[key] ) );
-
-                return children;
-            }, []);
+            return;
         }
 
-      , onChanges: function()
-        {
-            var props = this.props;
-            props.db.get( props.id, { rev: props.rev } ).then( this.onData );
-        }
+        console.log( "view", this.isMounted(), doc );
+        this.setState({ doc: doc });
+    }
+}
 
-      , onData: function( doc )
-        {
-            if( !this.isMounted() )
-            {
-                return;
-            }
+View.propTypes = {
+    id: React.PropTypes.string.isRequired
+  , rev: React.PropTypes.string
+  , ignore: React.PropTypes.arrayOf( React.PropTypes.string).isRequired
+};
 
-            console.log( "view", this.isMounted(), doc );
-            this.setState({ doc: doc });
-        }
-    });
-});
+View.defaultProps = {
+    ignore: [ "_id", "_rev" ]
+};

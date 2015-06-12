@@ -1,33 +1,28 @@
-define( function( require )
-{   "use strict";
+import React from "react";
+import { Button, Glyphicon } from "react-bootstrap";
 
-    var React       = require( "react" )
-      , Button      = require( "react-bootstrap/lib/Button" )
-      , Glyphicon   = require( "react-bootstrap/lib/Glyphicon" )
-      ;
+export default class extends React.Component
+{
+    render()
+    {
+        return React.createElement(
+            Button
+          , { onClick: this.handleClick }
+          , this.renderIcon()
+        );
+    }
 
-    return React.createClass({
-        render: function()
-        {
-            return React.createElement(
-                Button
-              , { onClick: this.handleClick }
-              , this.renderIcon()
-            );
-        }
+    renderIcon()
+    {
+        return React.createElement(
+            Glyphicon
+          , { glyph: "remove" }
+          , null
+        );
+    }
 
-      , renderIcon: function()
-        {
-            return React.createElement(
-                Glyphicon
-              , { glyph: "remove" }
-              , null
-            );
-        }
-
-      , handleClick: function()
-        {
-            this.props.onClick( this.props.value );
-        }
-    });
-});
+    handleClick()
+    {
+        this.props.onClick( this.props.value );
+    }
+}
