@@ -1,10 +1,12 @@
 import PouchDB from "pouchdb";
 
+import config from "../config";
+
 export default class Config
 {
     constructor()
     {
-        this.db = new PouchDB( "collector-config" );
+        this.db = new PouchDB( config.db.config );
     }
 
     init()
