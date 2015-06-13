@@ -3,7 +3,7 @@ import Alert from "react-bootstrap/lib/Alert";
 import Col from "react-bootstrap/lib/Col";
 import Input from "react-bootstrap/lib/Input";
 import PouchDB from "pouchdb";
-import Router from "director";
+import director from "director";
 
 import TypeModel from "../../model/Type";
 import FieldModel from "../../model/Field";
@@ -53,11 +53,6 @@ export default class Type extends React.Component
 
     loadedState( state )
     {
-        if ( !this.isMounted() )
-        {
-            return;
-        }
-
         this.setState( state );
     }
 
@@ -74,10 +69,10 @@ export default class Type extends React.Component
             load = this.loadDoc( state );
         }
 
-        load.then( this.loadFields )
-            .then( this.loadedState )
-            .catch( this.setError )
-            .then( this.loaded )
+        load.then( this.loadFields.bind( this ) )
+            .then( this.loadedState.bind( this ) )
+            .catch( this.setError.bind( this ) )
+            .then( this.loaded.bind( this ) )
         ;
     }
 
@@ -141,9 +136,9 @@ export default class Type extends React.Component
         });
 
         return load
-            .then( this.getRows )
-            .then( this.findMissingFields )
-            .then( this.getDocs )
+            .then( this.getRows.bind( this ) )
+            .then( this.findMissingFields.bind( this ) )
+            .then( this.getDocs.bind( this ) )
         ;
     }
 
@@ -157,10 +152,10 @@ export default class Type extends React.Component
         this.loading();
 
         props.db.put( doc )
-            .then( this.updateDoc )
+            .then( this.updateDoc.bind( this ) )
             .then( this.setState.bind( this, { alert: { bsStyle: "success", message: "Saved" } } ) )
-            .catch( this.setError )
-            .then( this.loaded )
+            .catch( this.setError.bind( this ) )
+            .then( this.loaded.bind( this ) )
         ;
     }
 
@@ -177,7 +172,7 @@ export default class Type extends React.Component
 
         if ( result.id !== props.doc._id )
         {
-            window.location.assign( props.uri.edit({ _id: result.id }) );
+            location.assign( props.uri.edit({ _id: result.id }) );
         }
     }
 
@@ -198,12 +193,12 @@ export default class Type extends React.Component
 
     findMissingFields( rows )
     {
-        var missing = rows.filter( this.isDocMissing );
+        var missing = rows.filter( this.isDocMissing.bind( this ) );
 
         if ( missing.length )
         {
             return Promise.reject( new ReferenceError(
-                "Can't load missing fields: " + missing.map( this.getReferenceId ).join( ", " )
+                "Can't load missing fields: " + missing.map( this.getReferenceId.bind( this ) ).join( ", " )
             ));
         }
 
@@ -222,7 +217,7 @@ export default class Type extends React.Component
 
     getDocs( rows )
     {
-        return rows.map( this.getDoc );
+        return rows.map( this.getDoc.bind( this ) );
     }
 
     /**
@@ -314,7 +309,7 @@ export default class Type extends React.Component
           , this.renderAlert( this.state.alert )
           , React.createElement(
                 "form"
-              , { className: "form-horizontal", onSubmit: this.onSubmit }
+              , { className: "form-horizontal", onSubmit: this.onSubmit.bind( this ) }
               , this.renderSingle( IdField )
               , this.renderSingle( RevField )
               , this.renderSingle( TypeField )
@@ -334,7 +329,7 @@ export default class Type extends React.Component
             Alert
           , React.__spread({
                 dismissAfter: this.props.dismissAfter
-              , onDismiss: this.clearAlert
+              , onDismiss: this.clearAlert.bind( this )
             }, alert )
           , alert.name && React.createElement( "h4", null, alert.name )
           , alert.message && React.createElement( "p", null, alert.message )
@@ -343,7 +338,7 @@ export default class Type extends React.Component
 
     renderFields( fields )
     {
-        return fields && fields.map( this.renderField );
+        return fields && fields.map( this.renderField.bind( this ) );
     }
 
     renderField( field )
@@ -435,7 +430,7 @@ export default class Type extends React.Component
 
 Type.propTypes = {
     db: React.PropTypes.instanceOf( PouchDB ).isRequired
-  , router: React.PropTypes.instanceOf( Router ).isRequired
+  , router: React.PropTypes.instanceOf( director.Router ).isRequired
   , doc: React.PropTypes.shape({
         _id: React.PropTypes.string
       , type: React.PropTypes.string
