@@ -1,15 +1,18 @@
-import React from "react";
-import { Grid, Nav, Navbar, NavItem } from "react-bootstrap";
+import React        from "react";
+import Grid         from "react-bootstrap/lib/Grid";
+import Nav          from "react-bootstrap/lib/Nav";
+import Navbar       from "react-bootstrap/lib/Navbar";
+import NavItem      from "react-bootstrap/lib/NavItem";
 
-import Config      from "./config/Config";
-import Genre       from "./Genre";
-import Database    from "../list/Database";
-import List        from "./List";
-import Tree        from "./Tree";
-import ItemView    from "./item/View";
-import TypeView    from "./meta/Type";
+import Config       from "./config/Config";
+import Genre        from "./Genre";
+import Database     from "../list/Database";
+import List         from "./List";
+import Tree         from "./Tree";
+import ItemView     from "./item/View";
+import TypeView     from "./meta/Type";
 
-export default class extends React.Component
+export default class Main extends React.Component
 {
     constructor( props )
     {
@@ -27,13 +30,11 @@ export default class extends React.Component
             "div"
           , null
           , this.renderNavigation()
-            /*
           , React.createElement(
                 Grid
               , { fluid: false }
               , this.renderView()
             )
-            */
         );
     }
 

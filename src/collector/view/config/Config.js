@@ -1,9 +1,9 @@
 import React from "react";
-import { PageHeader } from "react-bootstrap";
+import PageHeader from "react-bootstrap/lib/PageHeader";
 
 import Sync from "./sync/Sync";
 
-export default class extends React.Component
+export default class Config extends React.Component
 {
     render()
     {

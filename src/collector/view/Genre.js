@@ -1,5 +1,7 @@
 import React from  "react";
-import { Badge, ListGroup, ListGroupItem } from "react-bootstrap";
+import Badge from "react-bootstrap/lib/Badge";
+import ListGroup from "react-bootstrap/lib/ListGroup";
+import ListGroupItem from "react-bootstrap/lib/ListGroupItem";
 
 export default class Genre extends React.Component
 {

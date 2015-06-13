@@ -1,5 +1,7 @@
 import React from "react";
-import { Input, PageHeader, Table } from "react-bootstrap";
+import Input from "react-bootstrap/lib/Input";
+import PageHeader from "react-bootstrap/lib/PageHeader";
+import Table from "react-bootstrap/lib/Table";
 
 import Target from "./Target";
 

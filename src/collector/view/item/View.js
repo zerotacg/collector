@@ -1,5 +1,6 @@
 import React from "react";
-import { Button, Glyphicon } from "react-bootstrap";
+import Button from "react-bootstrap/lib/Button";
+import Glyphicon from "react-bootstrap/lib/Glyphicon";
 
 export default class View extends React.Component
 {

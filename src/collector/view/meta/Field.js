@@ -1,5 +1,6 @@
 import React from "react";
-import { Col, Input } from "react-bootstrap";
+import Col from "react-bootstrap/lib/Col";
+import Input from "react-bootstrap/lib/Input";
 
 export default class Field extends React.Component
 {

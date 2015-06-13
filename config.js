@@ -22,7 +22,7 @@ System.config({
     "docuri": "npm:docuri@4.1.1",
     "pouchdb": "github:pouchdb/pouchdb@3.6.0",
     "react": "npm:react@0.14.0-alpha3",
-    "react-bootstrap": "npm:react-bootstrap@0.24.0-alpha.1",
+    "react-bootstrap": "npm:react-bootstrap@0.24.0-alpha.2",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.3.0"
     },
@@ -122,6 +122,11 @@ System.config({
       "process": "github:jspm/nodelibs-process@0.1.1"
     },
     "npm:react-bootstrap@0.24.0-alpha.1": {
+      "classnames": "npm:classnames@2.1.2",
+      "process": "github:jspm/nodelibs-process@0.1.1",
+      "react": "npm:react@0.14.0-alpha3"
+    },
+    "npm:react-bootstrap@0.24.0-alpha.2": {
       "classnames": "npm:classnames@2.1.2",
       "process": "github:jspm/nodelibs-process@0.1.1",
       "react": "npm:react@0.14.0-alpha3"

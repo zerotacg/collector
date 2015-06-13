@@ -1,11 +1,12 @@
 import React from "react";
-import { PageHeader, Table } from "react-bootstrap";
+import PageHeader from "react-bootstrap/lib/PageHeader";
+import Table from "react-bootstrap/lib/Table";
 
 import Edit     from "./Edit";
 import Remove   from "./Remove";
 import Target   from "./Target";
 
-export default class extends React.Component
+export default class Sync extends React.Component
 {
     constructor( props )
     {

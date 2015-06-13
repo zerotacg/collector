@@ -1,5 +1,7 @@
 import React from "react";
-import { Alert, Col, Input } from "react-bootstrap";
+import Alert from "react-bootstrap/lib/Alert";
+import Col from "react-bootstrap/lib/Col";
+import Input from "react-bootstrap/lib/Input";
 import PouchDB from "pouchdb";
 import Router from "director";
 
