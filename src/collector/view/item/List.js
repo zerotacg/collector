@@ -13,7 +13,7 @@ export default class List extends React.Component
 {
     render()
     {
-        var children = this.props.children.map( this.renderItem );
+        var children = this.props.children.map( this.renderItem.bind( this ) );
 
         return React.createElement(
             "ul"
@@ -36,7 +36,7 @@ export default class List extends React.Component
           , React.createElement(
                 "div"
               , { className: "media-body" }
-              , this.renderAnchor( doc, this.renderHeading( doc.name ) )
+              , this.renderAnchor( doc, this.renderHeading( doc.name || doc._id ) )
             )
         );
     }

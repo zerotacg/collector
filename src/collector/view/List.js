@@ -46,7 +46,7 @@ export default React.createClass({
         return React.createElement(
             "ul"
           , { className: "media-list" }
-          , data && data.rows.map( this.getDoc ).map( this.renderItem )
+          , data && data.rows.map( this.getDoc.bind( this ) ).map( this.renderItem.bind( this ) )
         );
     }
 

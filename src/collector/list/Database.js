@@ -86,12 +86,13 @@ export default React.createClass({
 
   , queryOptions: function( props )
     {
-        var key = props.viewKey;
-        var level = this.level( props ) + 1;
-        var include_docs = level > props.keyLength;
+        var key = props.viewKey
+          , level = this.level( props ) + 1
+          , include_docs = level > props.keyLength
+          ;
         return {
             group: !include_docs
-          , group_level: level
+          , group_level: include_docs ? undefined : level
           , include_docs: include_docs
           , reduce: !include_docs
           , startkey: key
