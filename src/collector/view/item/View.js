@@ -17,12 +17,12 @@ export default class View extends React.Component
     {
         console.log( "view.mount" );
         props = props || this.props;
-        this.onChanges( props );
+        this.onChanges();
         this.changes = props.db.changes({
             live: true
           , doc_ids: [ props.id ]
           , since: "now"
-        }).on( "paused", this.onChanges );
+        }).on( "paused", () => this.onChanges );
     }
 
     componentWillUnmount()
@@ -96,17 +96,12 @@ export default class View extends React.Component
     onChanges()
     {
         var props = this.props;
-        props.db.get( props.id, { rev: props.rev } ).then( this.onData );
+        props.db.get( props.id, { rev: props.rev } ).then( doc => this.onData( doc ) );
     }
 
     onData( doc )
     {
-        if( !this.isMounted() )
-        {
-            return;
-        }
-
-        console.log( "view", this.isMounted(), doc );
+        console.log( "view", doc );
         this.setState({ doc: doc });
     }
 }

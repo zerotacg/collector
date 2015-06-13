@@ -9,6 +9,7 @@
   , "undef": true
   , "laxcomma": true
   , "bitwise": true
-  , "browser": true
+  , "browser": false
+  , "couch": true
   , "esnext": true
 }
