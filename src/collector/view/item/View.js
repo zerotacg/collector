@@ -51,7 +51,7 @@ export default class View extends React.Component
               , { className: "media-left" }
               , React.createElement(
                     "img"
-                  , { className: "media-object", height: 64, src: doc.image }
+                  , { className: "media-object", height: 160, src: doc.image }
                 )
              )
           , React.createElement(
