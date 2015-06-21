@@ -33,6 +33,8 @@
     "dependencies": {
       "director": "npm:director@^1.2.8",
       "docuri": "npm:docuri@^4.1.1",
+      "events": "github:jspm/nodelibs-events@^0.1.1",
+      "localforage": "npm:localforage@^1.2.3",
       "pouchdb": "github:pouchdb/pouchdb@^3.6.0",
       "react": "npm:react@^0.14.0-alpha3",
       "react-bootstrap": "npm:react-bootstrap@^0.24.0-alpha.1"

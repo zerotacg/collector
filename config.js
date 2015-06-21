@@ -20,6 +20,8 @@ System.config({
     "core-js": "npm:core-js@0.9.16",
     "director": "npm:director@1.2.8",
     "docuri": "npm:docuri@4.1.1",
+    "events": "github:jspm/nodelibs-events@0.1.1",
+    "localforage": "npm:localforage@1.2.3",
     "pouchdb": "github:pouchdb/pouchdb@3.6.0",
     "react": "npm:react@0.14.0-alpha3",
     "react-bootstrap": "npm:react-bootstrap@0.24.0-alpha.2",
@@ -62,6 +64,9 @@ System.config({
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "module": "github:jspm/nodelibs-module@0.1.0",
       "path": "github:jspm/nodelibs-path@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.1"
+    },
+    "npm:asap@1.0.0": {
       "process": "github:jspm/nodelibs-process@0.1.1"
     },
     "npm:assert@1.3.0": {
@@ -115,8 +120,16 @@ System.config({
       "process": "github:jspm/nodelibs-process@0.1.1",
       "source-map": "npm:source-map@0.1.31"
     },
+    "npm:localforage@1.2.3": {
+      "path": "github:jspm/nodelibs-path@0.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.1",
+      "promise": "npm:promise@5.0.0"
+    },
     "npm:path-browserify@0.0.0": {
       "process": "github:jspm/nodelibs-process@0.1.1"
+    },
+    "npm:promise@5.0.0": {
+      "asap": "npm:asap@1.0.0"
     },
     "npm:punycode@1.3.2": {
       "process": "github:jspm/nodelibs-process@0.1.1"

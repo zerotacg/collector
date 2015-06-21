@@ -1,7 +1,8 @@
 import React from "react";
 import PageHeader from "react-bootstrap/lib/PageHeader";
 
-import Sync from "./sync/Sync";
+import Database     from "./database/Database";
+import Sync         from "./sync/Sync";
 
 export default class Config extends React.Component
 {
@@ -11,6 +12,7 @@ export default class Config extends React.Component
             "div"
           , null
           , React.createElement( PageHeader, null, "Config" )
+          , React.createElement( Database, { config: this.props.config }, null )
           , React.createElement( Sync, { config: this.props.config }, null )
         );
     }
