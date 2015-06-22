@@ -8,32 +8,9 @@ export default class Config extends Events
     constructor()
     {
         super();
-        this.db = new PouchDB( config.db.config );
     }
 
     init()
     {
-    }
-
-    addTarget( target )
-    {
-        target.type = "config.sync.target";
-        this.db.post( target );
-    }
-
-    removeTarget( target )
-    {
-        this.db.remove( target );
-    }
-
-    targets()
-    {
-        return this.db.allDocs({ include_docs: true })
-            .then( function( result ) {
-                return result.rows.map( function( row ) {
-                    return row.doc;
-                });
-            })
-        ;
     }
 }

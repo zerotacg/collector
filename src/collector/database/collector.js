@@ -2,7 +2,7 @@ import PouchDB from "pouchdb";
 
 import config from "../config";
 
-var db = new PouchDB( config.db.main );
+var db = new PouchDB( config.db );
 /*
 db.bulkDocs([
     require( "./added" )
