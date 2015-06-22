@@ -33,9 +33,25 @@ export default class Url extends React.Component
         });
     }
 
+    isUrl( url )
+    {
+        try {
+            return !!(new URL( url ));
+        }
+        catch(e) {
+            return false;
+        }
+    }
+
     getInfo( url )
     {
+        if ( !this.isUrl( url ) )
+        {
+            return true;
+        }
+
         var db = new PouchDB( url, { skipSetup: true} );
+
         return (db
             .info()
             .then( this.setInfo.bind( this ) )
@@ -43,10 +59,10 @@ export default class Url extends React.Component
         );
     }
 
-    setInfo( info )
+    setInfo()
     {
         this.setState({
-            db: { info, error: undefined }
+            db: { info: true, error: undefined }
         });
     }
 
@@ -60,19 +76,14 @@ export default class Url extends React.Component
     validate( db )
     {
         var bsStyle = "error", help;
-        console.log( "db", db );
+
         if ( db )
         {
-            var { info, error } = db || {};
-            if ( info instanceof Promise )
-            {
-                bsStyle = "warning";
-                help = "checking...";
-            }
-            else if ( info )
+            var { info, error } = db;
+
+            if ( info === true )
             {
                 bsStyle = "success";
-                help = this.renderInfo( info );
             }
             else if ( error )
             {
@@ -82,17 +93,6 @@ export default class Url extends React.Component
         }
 
         return { bsStyle, help };
-    }
-
-    /**
-     * @param {Object} info
-     * @param {string} info.db_name
-     * @param {number} info.doc_count
-     * @returns {string}
-     */
-    renderInfo( info )
-    {
-        return `name: ${ info.db_name } document count: ${ info.doc_count }`;
     }
 
     /**
