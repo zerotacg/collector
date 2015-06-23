@@ -6,7 +6,7 @@ import NavItem      from "react-bootstrap/lib/NavItem";
 
 import Brand        from "../Brand";
 
-export default class NavBar extends Navbar
+export default class NavBar extends React.Component
 {
     constructor( props )
     {
@@ -21,10 +21,10 @@ export default class NavBar extends Navbar
     {
         return React.createElement(
             Navbar
-          , { brand: React.createElement( Brand ), fixedTop: true, fluid: true }
+          , this.props
           , React.createElement(
                 Nav
-              , { activeKey: this.state.path }
+              , { activeKey: this.state.path, eventKey: "nav" }
               , React.createElement(
                     NavItem
                   , { href: "#recent", eventKey: "recent" }
@@ -34,3 +34,9 @@ export default class NavBar extends Navbar
         );
     }
 }
+
+NavBar.defaultProps = {
+    brand: React.createElement( Brand )
+  , fixedTop: true
+  , fluid: true
+};

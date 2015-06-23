@@ -21,10 +21,12 @@
   "private": true,
   "license": "MIT",
   "devDependencies": {
-    "mocha": "~2.1.0",
-    "docuri": "~4.0.2",
     "browserify": "~9.0.3",
-    "jspm": "~0.15.7"
+    "chai": "^3.0.0",
+    "docuri": "~4.0.2",
+    "jspm": "~0.15.7",
+    "mocha": "~2.1.0",
+    "systemjs": "^0.18.2"
   },
   "jspm": {
     "directories": {
@@ -44,5 +46,8 @@
       "babel-runtime": "npm:babel-runtime@^5.1.13",
       "core-js": "npm:core-js@^0.9.4"
     }
+  },
+  "dependencies": {
+    "react": "^0.13.3"
   }
 }

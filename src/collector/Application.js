@@ -3,8 +3,8 @@ import Events       from "events";
 import React        from "react";
 import director     from "director";
 
-//import Main         from "./components/Main";
-import NavBar       from "./components/nav/NavBar";
+//import Main         from "./component/Main";
+import NavBar       from "component/nav/NavBar";
 import Config       from "./controller/Config";
 import collector    from "./database/collector";
 
