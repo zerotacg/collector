@@ -8,7 +8,7 @@
     "packages": "jspm_packages"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --recursive --require systemjs --require config",
     "postinstall": "bower install && npm run build",
     "build": "browserify --require docuri --standalone DocUri --outfile build/docuri.js",
     "preversion": "npm test"

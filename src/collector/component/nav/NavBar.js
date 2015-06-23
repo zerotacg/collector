@@ -5,6 +5,7 @@ import Navbar       from "react-bootstrap/lib/Navbar";
 import NavItem      from "react-bootstrap/lib/NavItem";
 
 import Brand        from "../Brand";
+import { default as Value, EVENT_CHANGE } from "../../store/Value";
 
 export default class NavBar extends React.Component
 {
@@ -13,8 +14,25 @@ export default class NavBar extends React.Component
         super( props );
 
         this.state = {
-            path: undefined
+            path: this.props.path.get()
         };
+
+        this.onPathChange = this.setPath.bind( this );
+    }
+
+    componentWillMount()
+    {
+        this.props.path.on( EVENT_CHANGE, this.onPathChange );
+    }
+
+    componentWillUnmount()
+    {
+        this.props.path.removeListener( EVENT_CHANGE, this.onPathChange );
+    }
+
+    setPath( path )
+    {
+        this.setState({ path: path });
     }
 
     render()
@@ -27,13 +45,21 @@ export default class NavBar extends React.Component
               , { activeKey: this.state.path, eventKey: "nav" }
               , React.createElement(
                     NavItem
-                  , { href: "#recent", eventKey: "recent" }
+                  , { href: this.props.uri.recent( this.props ), eventKey: "recent" }
                   , "Recent"
                 )
             )
         );
     }
 }
+
+NavBar.propTypes = {
+    path: React.PropTypes.instanceOf( Value ).isRequired
+  , db: React.PropTypes.string
+  , uri: React.PropTypes.shape({
+        recent: React.PropTypes.func
+    }).isRequired
+};
 
 NavBar.defaultProps = {
     brand: React.createElement( Brand )

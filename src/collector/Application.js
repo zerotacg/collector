@@ -4,8 +4,9 @@ import React        from "react";
 import director     from "director";
 
 //import Main         from "./component/Main";
-import NavBar       from "component/nav/NavBar";
+import NavBar       from "./component/nav/NavBar";
 import Config       from "./controller/Config";
+import Value        from "./store/Value";
 import collector    from "./database/collector";
 
 export default class Application extends Events
@@ -14,9 +15,10 @@ export default class Application extends Events
     {
         super();
         this.config = new Config();
+        this.path = new Value();
         //this.db = this.createDatabase();
-        //this.router = this.createRouter();
-        //this.uri = this.createUri();
+        this.router = this.createRouter();
+        this.uri = this.createUri();
     }
 
     createDatabase()
@@ -35,20 +37,8 @@ export default class Application extends Events
         });
         router.param( "path", /(.+)/ );
         router.mount({
-            "recent": this.setPath.bind( this, "recent" )
-          , "config": this.setPath.bind( this, "config" )
-          , "genre": this.onGenre.bind( this )
-          , "genre/:genre": this.onGenre.bind( this )
-          , "view/:path": this.onItemView.bind( this )
-          , "field": this.onField.bind( this )
-          , "field/:path": this.onField.bind( this )
-          //, "type": this.setPath.bind( this, "type" )
-          , "new/:path": this.onTypeNew.bind( this )
-          , "edit/:path": this.onTypeEdit.bind( this )
-          , "browse": this.onBrowse.bind( this )
-          , "browse/:path": this.onBrowse.bind( this )
-          , "add/:barcode": this.onAdd.bind( this )
-          , "clear": this.onClear.bind( this )
+            "recent": this.path.set.bind( this.path, "recent" )
+          //, "add/:barcode": this.onAdd.bind( this )
         });
 
         return router;
@@ -64,6 +54,7 @@ export default class Application extends Events
           , "#genre(/:key)": "genre"
           , "#field(/*key)": "field"
           , "#browse(/*paths)": "browse"
+          , "#(:db/)recent": "recent"
         });
 
         return uri;
@@ -71,9 +62,10 @@ export default class Application extends Events
 
     init()
     {
+        this.router.init();
         var nav = React.createElement(
             NavBar
-          , {app: this}
+          , { path: this.path, uri: this.uri }
         );
 
         React.render( nav, document.getElementById( "navigation" ) );
