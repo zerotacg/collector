@@ -25,6 +25,7 @@ System.config({
     "pouchdb": "github:pouchdb/pouchdb@3.6.0",
     "react": "npm:react@0.14.0-alpha3",
     "react-bootstrap": "npm:react-bootstrap@0.24.0-alpha.2",
+    "rx": "npm:rx@2.5.3",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.3.0"
     },
@@ -160,6 +161,9 @@ System.config({
       "stream-browserify": "npm:stream-browserify@1.0.0",
       "string_decoder": "npm:string_decoder@0.10.31",
       "util": "github:jspm/nodelibs-util@0.1.0"
+    },
+    "npm:rx@2.5.3": {
+      "process": "github:jspm/nodelibs-process@0.1.1"
     },
     "npm:source-map@0.1.31": {
       "amdefine": "npm:amdefine@0.1.1",

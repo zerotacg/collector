@@ -1,6 +1,6 @@
 import PouchDB from "pouchdb";
 
-import config from "../config";
+import config from "../config/config";
 
 var db = new PouchDB( config.db );
 /*

@@ -2,7 +2,7 @@ import PouchDB from "pouchdb";
 import React from "react";
 import Input from "react-bootstrap/lib/Input";
 
-import Config from "../../../controller/Config";
+import Config from "../../../config/Config";
 
 export default class Url extends React.Component
 {

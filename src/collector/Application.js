@@ -3,9 +3,9 @@ import Events       from "events";
 import React        from "react";
 import director     from "director";
 
+import Config       from "./config/Config";
 //import Main         from "./component/Main";
 import NavBar       from "./component/nav/NavBar";
-import Config       from "./controller/Config";
 import Value        from "./store/Value";
 import collector    from "./database/collector";
 
