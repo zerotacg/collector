@@ -30,7 +30,7 @@ module.exports = function ( config ) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'src/**/*.js': [ 'babel', 'coverage' ]
+            'src/**/*.js': [ 'coverage' ]
         },
 
 
@@ -38,6 +38,14 @@ module.exports = function ( config ) {
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
         reporters: [ 'progress', 'coverage' ],
+
+
+        coverageReporter: {
+            instrumenters: { isparta : require('isparta') },
+            instrumenter: {
+                '**/*.js': 'isparta'
+            }
+        },
 
 
         // web server port
