@@ -17,11 +17,13 @@ System.config({
   "map": {
     "babel": "npm:babel-core@5.5.6",
     "babel-runtime": "npm:babel-runtime@5.5.6",
+    "chai": "npm:chai@3.0.0",
     "core-js": "npm:core-js@0.9.16",
     "director": "npm:director@1.2.8",
     "docuri": "npm:docuri@4.1.1",
     "events": "github:jspm/nodelibs-events@0.1.1",
     "localforage": "npm:localforage@1.2.3",
+    "mocha": "npm:mocha@2.2.5",
     "pouchdb": "github:pouchdb/pouchdb@3.6.0",
     "react": "npm:react@0.14.0-alpha3",
     "react-bootstrap": "npm:react-bootstrap@0.24.0-alpha.2",
@@ -81,6 +83,14 @@ System.config({
       "ieee754": "npm:ieee754@1.1.6",
       "is-array": "npm:is-array@1.0.1"
     },
+    "npm:chai@3.0.0": {
+      "assertion-error": "npm:assertion-error@1.0.1",
+      "buffer": "github:jspm/nodelibs-buffer@0.1.0",
+      "deep-eql": "npm:deep-eql@0.1.3",
+      "process": "github:jspm/nodelibs-process@0.1.1",
+      "systemjs-json": "github:systemjs/plugin-json@0.1.0",
+      "type-detect": "npm:type-detect@1.0.0"
+    },
     "npm:classnames@2.1.2": {
       "assert": "github:jspm/nodelibs-assert@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.1",
@@ -93,6 +103,10 @@ System.config({
     },
     "npm:core-util-is@1.0.1": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0"
+    },
+    "npm:deep-eql@0.1.3": {
+      "buffer": "github:jspm/nodelibs-buffer@0.1.0",
+      "type-detect": "npm:type-detect@0.1.1"
     },
     "npm:director@1.2.8": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
@@ -125,6 +139,9 @@ System.config({
       "path": "github:jspm/nodelibs-path@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.1",
       "promise": "npm:promise@5.0.0"
+    },
+    "npm:mocha@2.2.5": {
+      "css": "github:systemjs/plugin-css@0.1.13"
     },
     "npm:path-browserify@0.0.0": {
       "process": "github:jspm/nodelibs-process@0.1.1"

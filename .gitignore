@@ -1,4 +1,5 @@
 .idea
 bower_components/
+coverage/
 jspm_packages/
 node_modules/

@@ -1,14 +1,14 @@
-var expect = require( "chai" ).expect
-  , System = require( "systemjs" )
-  ;
+import chai from "chai";
+import Config from "src/collector/config/Config";
 
 describe( "config", function () {
     "use strict";
 
     describe( "Config", function () {
-        var Config, storage;
+        var expect = chai.expect;
+        var storage;
 
-        beforeEach( "setup", function( done ) {
+        beforeEach( "setup", function() {
             storage = {
                 value: undefined
 
@@ -17,14 +17,6 @@ describe( "config", function () {
                     return Promise.resolve( this.value );
                 }
             };
-
-            System.import( "src/collector/config/Config" )
-                .then( function( module ) {
-                    Config = module.default;
-                })
-                .then( done )
-                .catch( done )
-            ;
         });
 
         describe( "#getDefault( string )", function () {

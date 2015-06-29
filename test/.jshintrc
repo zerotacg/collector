@@ -9,11 +9,7 @@
   , "undef": true
   , "laxcomma": true
   , "bitwise": true
-  , "node": true
   , "mocha": true
-  , "browser": false
-  , "esnext": false
-  , "globals": {
-        "Promise": true
-    }
+  , "browser": true
+  , "esnext": true
 }

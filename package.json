@@ -28,7 +28,17 @@
     "docuri": "~4.0.2",
     "jshint": "^2.8.0",
     "jspm": "~0.15.7",
+    "karma": "^0.12.37",
+    "karma-babel-preprocessor": "^5.2.1",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-coverage": "^0.4.2",
+    "karma-firefox-launcher": "^0.1.6",
+    "karma-jspm": "^1.1.5",
+    "karma-mocha": "^0.2.0",
+    "karma-phantomjs-launcher": "^0.2.0",
     "mocha": "~2.1.0",
+    "phantomjs": "^1.9.17",
     "systemjs": "^0.18.2"
   },
   "jspm": {
@@ -36,10 +46,12 @@
       "test": "test"
     },
     "dependencies": {
+      "chai": "npm:chai@^3.0.0",
       "director": "npm:director@^1.2.8",
       "docuri": "npm:docuri@^4.1.1",
       "events": "github:jspm/nodelibs-events@^0.1.1",
       "localforage": "npm:localforage@^1.2.3",
+      "mocha": "npm:mocha@^2.2.5",
       "pouchdb": "github:pouchdb/pouchdb@^3.6.0",
       "react": "npm:react@^0.14.0-alpha3",
       "react-bootstrap": "npm:react-bootstrap@^0.24.0-alpha.1",
