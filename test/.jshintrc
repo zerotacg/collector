@@ -13,4 +13,7 @@
   , "mocha": true
   , "browser": false
   , "esnext": false
+  , "globals": {
+        "Promise": true
+    }
 }

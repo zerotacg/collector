@@ -1,29 +1,36 @@
 import DocUri       from "docuri";
 import Events       from "events";
+import LocalForage  from "localforage";
 import React        from "react";
 import director     from "director";
 
 import Config       from "./config/Config";
+import defaults     from "./config/defaults";
 //import Main         from "./component/Main";
 import NavBar       from "./component/nav/NavBar";
 import Value        from "./store/Value";
-import collector    from "./database/collector";
+//import collector    from "./database/collector";
 
 export default class Application extends Events
 {
     constructor()
     {
         super();
-        this.config = new Config();
+        this.config = Application.createConfig();
         this.path = new Value();
         //this.db = this.createDatabase();
         this.router = this.createRouter();
         this.uri = this.createUri();
     }
 
+    static createConfig()
+    {
+        return new Config({ defaults, storage: LocalForage });
+    }
+
     createDatabase()
     {
-        var db = this.db = collector;
+        var db = null; //collector;
         db.changes({ live: true, since: "now" }).on( "paused", this.onChange.bind( this ) );
 
         return Promise.resolve( db );

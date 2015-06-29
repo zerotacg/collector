@@ -9,7 +9,7 @@
   },
   "scripts": {
     "lint": "jshint src",
-    "check": "npm test && npm run lint",
+    "pretest": "npm run lint",
     "test": "mocha --recursive --require test/setup",
     "postinstall": "bower install && npm run build",
     "build": "browserify --require docuri --standalone DocUri --outfile build/docuri.js",

@@ -19,7 +19,7 @@ describe( "config", function () {
             };
 
             System.import( "src/collector/config/Config" )
-                .then(function( module ) {
+                .then( function( module ) {
                     Config = module.default;
                 })
                 .then( done )
