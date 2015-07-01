@@ -7,6 +7,7 @@ import director     from "director";
 import Config       from "./config/Config";
 import defaults     from "./config/defaults";
 //import Main         from "./component/Main";
+import Form         from "./component/form/Form";
 import NavBar       from "./component/nav/NavBar";
 import Value        from "./store/Value";
 //import collector    from "./database/collector";
@@ -70,11 +71,23 @@ export default class Application extends Events
     init()
     {
         this.router.init();
-        var nav = React.createElement(
+        React.render( this.createNavBar(), document.getElementById( "navigation" ) );
+        React.render( this.createForm(), document.getElementById( "form" ) );
+    }
+
+    createNavBar()
+    {
+        return React.createElement(
             NavBar
           , { path: this.path, uri: this.uri }
         );
+    }
 
-        React.render( nav, document.getElementById( "navigation" ) );
+    createForm()
+    {
+        return React.createElement(
+            Form
+          , { fields: [{ key: "_id", type: "text", label: "Id" }] }
+        );
     }
 }

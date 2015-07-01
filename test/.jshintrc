@@ -10,6 +10,7 @@
   , "laxcomma": true
   , "bitwise": true
   , "mocha": true
+  , "expr": true
   , "browser": true
   , "esnext": true
 }
