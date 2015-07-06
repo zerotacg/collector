@@ -23,11 +23,7 @@ describe( "Form", function () {
         });
 
         it( "should contain a submit button", function () {
-            var inputs = TestUtils.scryRenderedDOMComponentsWithTag( component, "input" )
-                    .filter( input => input.props.type === "submit" )
-            ;
-
-            expect( inputs ).to.have.length( 1 );
+            expect( TestUtils.isCompositeComponent( component.refs.saveButton ) ).to.be.true;
         });
 
         it( "should add inputs for all fields", function () {

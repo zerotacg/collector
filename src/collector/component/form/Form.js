@@ -13,10 +13,7 @@ export default class Form extends React.Component
             "form"
           , { className: "form-horizontal" }
           , fields
-          , React.createElement(
-                Input
-              , { type: "submit", value: "Save", wrapperClassName: "col-md-offset-2 col-sm-2" }
-            )
+          , this.renderSaveButton()
         );
     }
 
@@ -29,6 +26,14 @@ export default class Form extends React.Component
               , wrapperClassName: "col-sm-10"
               , name: field.key
             })
+        );
+    }
+
+    renderSaveButton()
+    {
+        return React.createElement(
+            Input
+          , { ref: "saveButton", type: "submit", value: "Save", wrapperClassName: "col-md-offset-2 col-sm-2" }
         );
     }
 }
