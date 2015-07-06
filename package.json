@@ -12,12 +12,12 @@
     "pretest": "npm run lint",
     "test": "mocha --recursive --require test/setup",
     "postinstall": "bower install && npm run build",
-    "build": "browserify --require docuri --standalone DocUri --outfile build/docuri.js",
+    "build": "",
     "preversion": "npm run check"
   },
   "repository": {
     "type": "git",
-    "url": "zero@gaia:~/git/www-collector.git"
+    "url": "https://github.com/zerotacg/collector.git"
   },
   "author": "Tobias Peters <tobias.peters@kreativeffekt.at>",
   "private": true,
