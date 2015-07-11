@@ -9,33 +9,43 @@ describe( "component", function () {
 describe( "form", function () {
 describe( "Form", function () {
     var expect = chai.expect;
-    var element, component;
+    var form;
 
-    beforeEach( "setup", function() {
-        element = React.createElement( Form );
-        component = TestUtils.renderIntoDocument( element );
-    });
 
     describe( "#render()", function () {
-        it( "should contain a form", function () {
-            var form = TestUtils.findRenderedDOMComponentWithTag( component, "form" );
-            expect( form ).to.be.ok;
+        beforeEach( "setup", function() {
+            form = createForm();
         });
 
-        it( "should contain a submit button", function () {
-            expect( TestUtils.isCompositeComponent( component.refs.saveButton ) ).to.be.true;
+        function createForm( props ) {
+            var element = React.createElement( Form, props );
+            return TestUtils.renderIntoDocument( element );
+        }
+
+        function expectToHaveTag( tagName ) {
+            var dom = TestUtils.findRenderedDOMComponentWithTag( form, tagName );
+            expect( dom ).to.be.ok;
+        }
+
+        function expectToBeComponent( component ) {
+            expect( TestUtils.isCompositeComponent( component ) ).to.be.true;
+        }
+
+        it( "should contain a form", function () {
+            expectToHaveTag( "form" );
+        });
+
+        it( "should contain a save button", function () {
+            expectToBeComponent( form.refs.saveButton );
         });
 
         it( "should add inputs for all fields", function () {
             var fields = [
                     { key: "text", type: "text" }
                   , { key: "password", type: "password" }
-                ]
-              , element = React.createElement( Form,  { fields } )
-              , component = TestUtils.renderIntoDocument( element )
-              ;
-
-            var inputs = TestUtils.scryRenderedDOMComponentsWithTag( component, "input" );
+                ];
+            var form = createForm( { fields } );
+            var inputs = TestUtils.scryRenderedDOMComponentsWithTag( form, "input" );
             expect( inputs ).to.have.length.of.at.least( fields.length );
             expect( inputs[0].props.type ).to.equal( fields[0].type );
             expect( inputs[1].props.type ).to.equal( fields[1].type );
