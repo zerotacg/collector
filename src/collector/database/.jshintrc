@@ -5,11 +5,10 @@
   , "forin": true
   , "noempty": true
   , "eqeqeq": true
-  , "strict": true
+  , "strict": false
   , "undef": true
   , "laxcomma": true
   , "bitwise": true
-  , "browser": false
   , "couch": true
   , "esnext": true
 }

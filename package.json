@@ -11,8 +11,8 @@
     "lint": "jshint src",
     "pretest": "npm run lint",
     "test": "mocha --recursive --require test/setup",
-    "postinstall": "bower install && npm run build",
-    "build": "",
+    "postinstall": "bower install",
+    "build": "jspm bundle-sfx src/main dist/collector.js --minify",
     "preversion": "npm run check"
   },
   "repository": {
@@ -23,6 +23,7 @@
   "private": true,
   "license": "MIT",
   "devDependencies": {
+    "appcache-manifest": "^1.0.3",
     "browserify": "~9.0.3",
     "chai": "^3.0.0",
     "docuri": "~4.0.2",
@@ -47,6 +48,7 @@
       "test": "test"
     },
     "dependencies": {
+      "bootstrap": "github:twbs/bootstrap@^3.3.5",
       "chai": "npm:chai@^3.0.0",
       "director": "npm:director@^1.2.8",
       "docuri": "npm:docuri@^4.1.1",

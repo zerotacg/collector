@@ -1,6 +1,4 @@
-define( function(){ "use strict"; return (
-function( doc )
+export default function( doc )
 {
     emit( doc.added );
-});
-});
+}
