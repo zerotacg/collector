@@ -10,7 +10,7 @@
   "scripts": {
     "lint": "jshint src",
     "pretest": "npm run lint",
-    "test": "mocha --recursive --require test/setup",
+    "test": "karma --single-run",
     "postinstall": "jspm install",
     "build": "jspm bundle-sfx src/main dist/collector.js --minify",
     "preversion": "npm run check"
