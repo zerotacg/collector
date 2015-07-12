@@ -15,5 +15,4 @@ test/
 .rsyncignore
 karma.conf.js
 package.json
-README.md
 npm-debug.log
