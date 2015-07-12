@@ -10,9 +10,14 @@
   "scripts": {
     "lint": "jshint src",
     "pretest": "npm run lint",
-    "test": "karma --single-run",
+    "test": "karma start --single-run",
     "postinstall": "jspm install",
-    "build": "jspm bundle-sfx src/main dist/collector.js --minify",
+    "clean": "rimraf dist/* && rimraf collector.js*",
+    "build:js": "jspm bundle src/main collector.js --minify --inject",
+    "build:asset": "rsync --recursive --times --human-readable --progress --delete --exclude-from=.rsyncignore . dist",
+    "build": "npm run build:js && npm run build:asset",
+    "postbuild": "jspm unbundle",
+    "deploy": "gh-pages --dist dist",
     "preversion": "npm run check"
   },
   "repository": {
@@ -24,6 +29,7 @@
   "license": "MIT",
   "devDependencies": {
     "appcache-manifest": "^1.0.3",
+    "gh-pages": "^0.3.1",
     "isparta": "^3.0.3",
     "jshint": "^2.8.0",
     "jspm": "~0.15.7",
@@ -37,6 +43,7 @@
     "karma-mocha": "^0.2.0",
     "karma-phantomjs-launcher": "^0.2.0",
     "phantomjs": "^1.9.17",
+    "rimraf": "^2.4.1",
     "systemjs": "^0.18.2"
   },
   "jspm": {
