@@ -1,14 +1,15 @@
-import DocUri       from "docuri";
-import Events       from "events";
+import director from "director";
+import DocUri from "docuri";
+import Events from "events";
 import LocalForage  from "localforage";
-import React        from "react";
-import director     from "director";
+import React from "react";
+import Rx from "rx";
 
 import Config       from "./config/Config";
 import defaults     from "./config/defaults";
 //import Main         from "./component/Main";
 import Form         from "./component/form/Form";
-import NavBar       from "./component/nav/NavBar";
+import NavBar       from "./component/navigation/NavBar";
 import Value        from "./store/Value";
 //import collector    from "./database/collector";
 
@@ -43,12 +44,12 @@ export default class Application extends Events
     {
         var router = new director.Router();
         router.configure({
-            on: console.log.bind( console, "router" )
+            on: function(){ console.log("router", arguments ); }
         });
         router.param( "path", /(.+)/ );
         router.mount({
             "recent": this.path.set.bind( this.path, "recent" )
-          //, "add/:barcode": this.onAdd.bind( this )
+          //, "add/:barcode/:foo": console.log.bind( console, "add/:barcode" )
         });
 
         return router;
@@ -79,16 +80,8 @@ export default class Application extends Events
     createNavBar()
     {
         return React.createElement(
-            NavBar
-          , { path: this.path, uri: this.uri }
-        );
-    }
-
-    createForm()
-    {
-        return React.createElement(
-            Form
-          , { fields: [{ key: "_id", type: "text", label: "Id" }] }
+            NavBar,
+            { path: this.path_stream }
         );
     }
 }
