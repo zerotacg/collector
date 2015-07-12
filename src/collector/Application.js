@@ -12,6 +12,8 @@ import NavBar       from "./component/nav/NavBar";
 import Value        from "./store/Value";
 //import collector    from "./database/collector";
 
+import "bootstrap/css/bootstrap.css!";
+
 export default class Application extends Events
 {
     constructor()
@@ -71,8 +73,7 @@ export default class Application extends Events
     init()
     {
         this.router.init();
-        React.render( this.createNavBar(), document.getElementById( "navigation" ) );
-        React.render( this.createForm(), document.getElementById( "form" ) );
+        React.render( this.createNavBar(), document.getElementById( "application" ) );
     }
 
     createNavBar()

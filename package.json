@@ -11,7 +11,7 @@
     "lint": "jshint src",
     "pretest": "npm run lint",
     "test": "mocha --recursive --require test/setup",
-    "postinstall": "bower install",
+    "postinstall": "jspm install",
     "build": "jspm bundle-sfx src/main dist/collector.js --minify",
     "preversion": "npm run check"
   },
@@ -24,9 +24,6 @@
   "license": "MIT",
   "devDependencies": {
     "appcache-manifest": "^1.0.3",
-    "browserify": "~9.0.3",
-    "chai": "^3.0.0",
-    "docuri": "~4.0.2",
     "isparta": "^3.0.3",
     "jshint": "^2.8.0",
     "jspm": "~0.15.7",
@@ -39,7 +36,6 @@
     "karma-jspm": "^1.1.5",
     "karma-mocha": "^0.2.0",
     "karma-phantomjs-launcher": "^0.2.0",
-    "mocha": "~2.1.0",
     "phantomjs": "^1.9.17",
     "systemjs": "^0.18.2"
   },
@@ -49,12 +45,12 @@
     },
     "dependencies": {
       "bootstrap": "github:twbs/bootstrap@^3.3.5",
-      "chai": "npm:chai@^3.0.0",
+      "clean-css": "npm:clean-css@^3.3.5",
+      "css": "github:systemjs/plugin-css@^0.1.13",
       "director": "npm:director@^1.2.8",
       "docuri": "npm:docuri@^4.1.1",
       "events": "github:jspm/nodelibs-events@^0.1.1",
       "localforage": "npm:localforage@^1.2.3",
-      "mocha": "npm:mocha@^2.2.5",
       "pouchdb": "github:pouchdb/pouchdb@^3.6.0",
       "react": "npm:react@^0.14.0-alpha3",
       "react-bootstrap": "npm:react-bootstrap@^0.24.0-alpha.1",
@@ -63,10 +59,9 @@
     "devDependencies": {
       "babel": "npm:babel-core@^5.1.13",
       "babel-runtime": "npm:babel-runtime@^5.1.13",
-      "core-js": "npm:core-js@^0.9.4"
+      "chai": "npm:chai@^3.0.0",
+      "core-js": "npm:core-js@^0.9.4",
+      "mocha": "npm:mocha@^2.2.5"
     }
-  },
-  "dependencies": {
-    "react": "^0.13.3"
   }
 }
