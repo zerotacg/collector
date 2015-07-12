@@ -53,7 +53,6 @@ describe( "config", function () {
                   , config = new Config({ defaults: defaults, storage: storage })
                   ;
 
-
                 config.get( "db" )
                     .then(function( value ) {
                         expect( value ).to.equal( defaults.db );

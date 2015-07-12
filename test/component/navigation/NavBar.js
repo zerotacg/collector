@@ -18,7 +18,7 @@ describe("component", function () {
 
                 beforeEach("setup", function () {
                     nav = render(NavBar, {
-                        path: Rx.Observable.never()
+                        path: new Rx.Subject()
                     });
                 });
 
@@ -41,14 +41,16 @@ describe("component", function () {
 
                 it("should listen to path changes", function ( done ) {
                     var path = "recent";
-                    var observable = Rx.Observable.just(path);
+                    var subject = new Rx.Subject();
                     var nav = render(NavBar, {
-                        path: observable
+                        path: subject
                     });
-                    observable.subscribeOnCompleted(function() {
+                    subject.subscribeOnCompleted(function() {
                         expect( nav.state.path ).to.equal( path );
                         done();
                     });
+                    subject.onNext( path );
+                    subject.onCompleted();
                 });
             });
         });
