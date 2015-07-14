@@ -31,7 +31,10 @@ export default class NavBar extends React.Component
 
     componentWillUnmount()
     {
-        this.subscription && this.subscription.dispose();
+        if ( this.subscription )
+        {
+            this.subscription.dispose();
+        }
     }
 
     setPath( path )
