@@ -2,7 +2,7 @@ import chai from "chai";
 import React from "react";
 import TestUtils from "react/addons/TestUtils";
 
-import { render } from "test/component/TestUtils";
+import { render } from "test/collector/component/TestUtils";
 
 import Recent from "collector/component/navigation/item/Recent";
 
