@@ -4,6 +4,7 @@ import Events from "events";
 import LocalForage  from "localforage";
 import React from "react";
 import Rx from "rx";
+import PouchDB from "pouchdb";
 
 import Config       from "./config/Config";
 import defaults     from "./config/defaults";
@@ -17,27 +18,23 @@ import "bootstrap/css/bootstrap.css!";
 
 export default class Application extends Events
 {
-    constructor()
+    constructor( cfg )
     {
         super();
-        this.config = Application.createConfig();
+        this.config = cfg.config;
+        this.factory = cfg.factory;
         this.path = new Value();
-        //this.db = this.createDatabase();
+        this.db = this.createDatabase();
         this.router = this.createRouter();
         this.uri = this.createUri();
     }
 
-    static createConfig()
-    {
-        return new Config({ defaults, storage: LocalForage });
-    }
-
     createDatabase()
     {
-        var db = null; //collector;
-        db.changes({ live: true, since: "now" }).on( "paused", this.onChange.bind( this ) );
-
-        return Promise.resolve( db );
+        return (
+            this.config.get("db")
+                .then( config => this.factory.createDatabase( config ) )
+        );
     }
 
     createRouter()

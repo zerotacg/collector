@@ -17,12 +17,16 @@ export default class Config
 
     map( key, value )
     {
-        if ( value === undefined )
+        if ( this.isDefined(value) )
         {
             return this.getDefault( key );
         }
 
         return value;
+    }
+
+    isDefined( value ) {
+        return value === undefined || value === null;
     }
 
     getDefault( key )

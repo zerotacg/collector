@@ -38,7 +38,15 @@ describe( "config", function () {
                 expect( config.map( "db", undefined ) ).to.equal( defaults.db );
             });
 
-            it( "should return the the the value if not undefined", function () {
+            it( "should return the the default for given key if the value is null", function () {
+                var defaults = { db: "db default value" }
+                  , config = new Config({ defaults: defaults })
+                  ;
+
+                expect( config.map( "db", null ) ).to.equal( defaults.db );
+            });
+
+            it( "should return the the the value if defined", function () {
                 var defaults = { db: "db default value" }
                   , config = new Config({ defaults: defaults })
                   ;
