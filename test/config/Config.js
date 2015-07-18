@@ -7,7 +7,7 @@ describe( "config", function () {
 
     describe( "Config", function () {
         var expect = chai.expect;
-        var config, defaults, storage;
+        var config, defaults, storage, key;
 
         beforeEach( "setup", function() {
             storage = {
@@ -19,6 +19,10 @@ describe( "config", function () {
                 }
             };
 
+            key = "db";
+            defaults = {};
+            defaults[key] = "db default value";
+
             config = new Config({
                 defaults,
                 storage
@@ -26,32 +30,31 @@ describe( "config", function () {
         });
 
         describe( "#get( string )", function () {
-            it( "should return the default value if nothing is stored", function ( done ) {
-                var defaults = { db: "db default value" }
-                    , config = new Config({ defaults: defaults, storage: storage })
-                    ;
-
-                config.get( "db" )
-                    .then(function( value ) {
-                        expect( value ).to.equal( defaults.db );
+            function expectConfigToEqual( expected, done ) {
+                config.get(key)
+                    .then(function ( value ) {
+                        expect(value).to.equal(expected);
                     })
-                    .then( done )
-                    .catch( done )
+                    .then(done)
+                    .catch(done)
                 ;
+            }
+
+            it( "should return the default value is undefined", function ( done ) {
+                storage.value = undefined;
+
+                expectConfigToEqual( defaults[key], done);
+            });
+
+            it( "should return the default value is null", function ( done ) {
+                storage.value = null;
+
+                expectConfigToEqual( defaults[key], done);
             });
 
             it( "should return the stored value if available", function ( done ) {
-                var config = new Config({ storage: storage });
-
                 storage.value = "stored value";
-
-                config.get( "db" )
-                    .then(function( value ) {
-                        expect( value ).to.equal( storage.value );
-                    })
-                    .then( done )
-                    .catch( done )
-                ;
+                expectConfigToEqual( storage.value, done);
             });
         });
 
@@ -60,43 +63,18 @@ describe( "config", function () {
                 var stream = config.stream( "db" );
                 expect( stream ).to.be.an.instanceof( Rx.Observable );
             });
-        });
 
-
-        describe( "#map( string, any )", function () {
-            it( "should return the the default for given key if the value is undefined", function () {
-                var defaults = { db: "db default value" }
-                  , config = new Config({ defaults: defaults })
-                  ;
-
-                expect( config.map( "db", undefined ) ).to.equal( defaults.db );
+            it("should stream the default value if no config is available", function () {
+                var stream = config.stream( "db" );
+                /*
+                expect( stream ).to.be.an.instanceof( Rx.Observable );
+                stream.subscribeOnNext(function( db_config ) {
+                    expect( db_config ).to.equal( defaults.db );
+                    done();
+                });
+                */
             });
 
-            it( "should return the the default for given key if the value is null", function () {
-                var defaults = { db: "db default value" }
-                  , config = new Config({ defaults: defaults })
-                  ;
-
-                expect( config.map( "db", null ) ).to.equal( defaults.db );
-            });
-
-            it( "should return the the the value if defined", function () {
-                var defaults = { db: "db default value" }
-                  , config = new Config({ defaults: defaults })
-                  ;
-
-                expect( config.map( "db", "value") ).to.equal( "value" );
-            });
-        });
-
-        describe( "#getDefault( string )", function () {
-            it( "should return the value in the defaults for given key", function () {
-                var defaults = { db: "db default value" }
-                    , config = new Config({ defaults: defaults })
-                    ;
-
-                expect( config.getDefault( "db" ) ).to.equal( defaults.db );
-            });
         });
     });
 });
