@@ -17,9 +17,8 @@ describe("collector", function () {
             };
 
             factory = {
-                database: undefined,
-                createDatabase() {
-                    return Promise.resolve( this.database );
+                createDatabase( config ) {
+                    return Promise.resolve( config );
                 }
             };
         });
@@ -29,7 +28,6 @@ describe("collector", function () {
                 var db_config = { name: "test-db" };
 
                 config.value = db_config;
-                factory.database = db_config;
 
                 var app = new Application({ config, factory });
                 expect( app.db ).to.be.an.instanceof( Promise );
