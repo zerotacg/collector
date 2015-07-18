@@ -1,4 +1,5 @@
 import chai from "chai";
+import Rx from "rx";
 import Config from "src/collector/config/Config";
 
 describe( "config", function () {
@@ -6,7 +7,7 @@ describe( "config", function () {
 
     describe( "Config", function () {
         var expect = chai.expect;
-        var storage;
+        var config, defaults, storage;
 
         beforeEach( "setup", function() {
             storage = {
@@ -17,17 +18,50 @@ describe( "config", function () {
                     return Promise.resolve( this.value );
                 }
             };
-        });
 
-        describe( "#getDefault( string )", function () {
-            it( "should return the value in the defaults for given key", function () {
-                var defaults = { db: "db default value" }
-                  , config = new Config({ defaults: defaults })
-                  ;
-
-                expect( config.getDefault( "db" ) ).to.equal( defaults.db );
+            config = new Config({
+                defaults,
+                storage
             });
         });
+
+        describe( "#get( string )", function () {
+            it( "should return the default value if nothing is stored", function ( done ) {
+                var defaults = { db: "db default value" }
+                    , config = new Config({ defaults: defaults, storage: storage })
+                    ;
+
+                config.get( "db" )
+                    .then(function( value ) {
+                        expect( value ).to.equal( defaults.db );
+                    })
+                    .then( done )
+                    .catch( done )
+                ;
+            });
+
+            it( "should return the stored value if available", function ( done ) {
+                var config = new Config({ storage: storage });
+
+                storage.value = "stored value";
+
+                config.get( "db" )
+                    .then(function( value ) {
+                        expect( value ).to.equal( storage.value );
+                    })
+                    .then( done )
+                    .catch( done )
+                ;
+            });
+        });
+
+        describe("#stream( string )", function () {
+            it("should return an Observable", function () {
+                var stream = config.stream( "db" );
+                expect( stream ).to.be.an.instanceof( Rx.Observable );
+            });
+        });
+
 
         describe( "#map( string, any )", function () {
             it( "should return the the default for given key if the value is undefined", function () {
@@ -55,33 +89,13 @@ describe( "config", function () {
             });
         });
 
-        describe( "#get( string )", function () {
-            it( "should return the default value if nothing is stored", function ( done ) {
+        describe( "#getDefault( string )", function () {
+            it( "should return the value in the defaults for given key", function () {
                 var defaults = { db: "db default value" }
-                  , config = new Config({ defaults: defaults, storage: storage })
-                  ;
+                    , config = new Config({ defaults: defaults })
+                    ;
 
-                config.get( "db" )
-                    .then(function( value ) {
-                        expect( value ).to.equal( defaults.db );
-                    })
-                    .then( done )
-                    .catch( done )
-                ;
-            });
-
-            it( "should return the stored value if available", function ( done ) {
-                var config = new Config({ storage: storage });
-
-                storage.value = "stored value";
-
-                config.get( "db" )
-                    .then(function( value ) {
-                        expect( value ).to.equal( storage.value );
-                    })
-                    .then( done )
-                    .catch( done )
-                ;
+                expect( config.getDefault( "db" ) ).to.equal( defaults.db );
             });
         });
     });

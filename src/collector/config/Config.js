@@ -1,3 +1,5 @@
+import Rx from "rx";
+
 export default class Config
 {
     constructor( cfg )
@@ -13,6 +15,11 @@ export default class Config
                 .getItem( key )
                 .then( this.map.bind( this, key ) )
         );
+    }
+
+    stream( key )
+    {
+        return Rx.Observable.return();
     }
 
     map( key, value )

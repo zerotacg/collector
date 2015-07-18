@@ -62,7 +62,7 @@ export default class NavBar extends React.Component
 
 NavBar.propTypes = {
     path: React.PropTypes.shape({
-
+        subscribeOnNext: React.PropTypes.func.isRequired
     })
 };
 

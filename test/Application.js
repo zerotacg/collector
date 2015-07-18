@@ -19,7 +19,7 @@ describe("collector", function () {
             factory = {
                 database: undefined,
                 createDatabase() {
-                    return this.database;
+                    return Promise.resolve( this.database );
                 }
             };
         });
