@@ -35,8 +35,7 @@ describe( "config", function () {
                     .then(function ( value ) {
                         expect(value).to.equal(expected);
                     })
-                    .then(done)
-                    .catch(done)
+                    .then(done, done)
                 ;
             }
 
@@ -59,20 +58,61 @@ describe( "config", function () {
         });
 
         describe("#stream( string )", function () {
+            var storage;
+            var scheduler;
+
+            beforeEach("setup", function() {
+                scheduler= new Rx.TestScheduler();
+
+                storage = {
+                    getItem: function()
+                    {
+                        return scheduler.createResolvedPromise( 1, this.value );
+                    }
+                };
+
+                config = new Config({
+                    defaults,
+                    storage,
+                    scheduler
+                });
+            });
+
             it("should return an Observable", function () {
-                var stream = config.stream( "db" );
+                var stream = config.stream();
                 expect( stream ).to.be.an.instanceof( Rx.Observable );
             });
 
-            it("should stream the default value if no config is available", function () {
-                var stream = config.stream( "db" );
-                /*
-                expect( stream ).to.be.an.instanceof( Rx.Observable );
-                stream.subscribeOnNext(function( db_config ) {
-                    expect( db_config ).to.equal( defaults.db );
-                    done();
+            it("should stream the value from storage", function () {
+                storage.value = "stored value";
+                expectStreamOnNextToEqual( storage.value );
+            });
+
+            function expectStreamOnNextToEqual( expected ) {
+                var stream = config.stream( key );
+                var actual;
+                stream.subscribeOnNext(value => {
+                    actual = value;
                 });
-                */
+                scheduler.advanceBy(1);
+                expect(actual).to.equal(expected);
+            }
+
+            it("should stream the values from updates", function () {
+                var stream = config.stream( key );
+                var actual;
+
+                stream.subscribeOnNext( value => { actual = value; } );
+
+                var new_value = "value 1";
+                config.set( key, new_value );
+                scheduler.advanceBy( 1 );
+                expect( actual ).to.equal( new_value );
+
+                new_value = "value 2";
+                config.set( key, new_value );
+                scheduler.advanceBy( 1 );
+                expect( actual ).to.equal( new_value );
             });
 
         });

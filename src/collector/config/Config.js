@@ -6,6 +6,8 @@ export default class Config
     {
         this.defaults = cfg.defaults;
         this.storage = cfg.storage;
+        this.scheduler = cfg.scheduler;
+        this.subject = new Rx.Subject();
     }
 
     get( key )
@@ -13,18 +15,13 @@ export default class Config
         return (
             this.storage
                 .getItem( key )
-                .then( this.map.bind( this, key ) )
+                .then( value => this.map( key, value ) )
         );
-    }
-
-    stream( key )
-    {
-        return Rx.Observable.return();
     }
 
     map( key, value )
     {
-        if ( this.isDefined(value) )
+        if ( this.isNotDefined(value) )
         {
             return this.getDefault( key );
         }
@@ -32,12 +29,25 @@ export default class Config
         return value;
     }
 
-    isDefined( value ) {
+    isNotDefined( value ) {
         return value === undefined || value === null;
     }
 
     getDefault( key )
     {
         return this.defaults[ key ];
+    }
+
+    stream( key )
+    {
+        return (Rx.Observable
+            .fromPromise( this.get( key ) )
+            .merge( this.subject.map( object => object.value ) )
+        );
+    }
+
+    set( key, value )
+    {
+        this.scheduler.schedule(() => this.subject.onNext({ key, value }) );
     }
 }
