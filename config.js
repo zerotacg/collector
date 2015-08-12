@@ -25,6 +25,7 @@ System.config({
     "css": "github:systemjs/plugin-css@0.1.13",
     "director": "npm:director@1.2.8",
     "docuri": "npm:docuri@4.1.1",
+    "events": "github:jspm/nodelibs-events@0.1.1",
     "localforage": "npm:localforage@1.2.3",
     "mocha": "npm:mocha@2.2.5",
     "pouchdb": "github:pouchdb/pouchdb@3.6.0",

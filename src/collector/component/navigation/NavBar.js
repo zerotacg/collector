@@ -25,7 +25,7 @@ export default class NavBar extends React.Component
         var path = this.props.path;
         if ( path )
         {
-            this.subscription = this.props.path.subscribeOnNext( this.setPath, this );
+            this.subscription = path.subscribeOnNext( this.setPath, this );
         }
     }
 
