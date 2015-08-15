@@ -24,9 +24,14 @@ export default class Application extends Events
         this.config = cfg.config;
         this.factory = cfg.factory;
         this.path = new Value();
-        this.db = this.factory.createDatabase( this.config.get("db") );
+        this.db = this.createDatabase();
         this.router = this.createRouter();
         this.uri = this.createUri();
+    }
+
+    createDatabase() {
+        var db_config = this.config.get("db");
+        return db_config.then( config => this.factory.createDatabase(config) );
     }
 
     createRouter()
