@@ -1,13 +1,17 @@
 import PouchDB from "pouchdb";
 
-import config from "../config/config";
+import recent from "_design/recent/document";
 
-var db = new PouchDB( config.db );
-/*
-db.bulkDocs([
-    require( "./added" )
-  , require( "./genre" )
-]);
-*/
+export default class extends PouchDB {
 
-export default db;
+    constructor() {
+        super();
+        this.install();
+    }
+
+    install() {
+        this.bulkDocs([
+            recent
+        ]);
+    }
+}
