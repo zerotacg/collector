@@ -97,7 +97,10 @@ export default class Application extends Events
         var store = this.store = this.createRecentStore( this.db );
         return React.createElement(
             ListContainer,
-            { itemStream: store.getItems() }
+            {
+                itemStream: store.getItems(),
+                uri: this.uri
+            }
         );
     }
 

@@ -40,7 +40,9 @@ export default class ListContainer extends React.Component
     {
         return React.createElement(
             List,
-            null,
+            {
+                uri: this.props.uri
+            },
             this.state.items
         );
     }

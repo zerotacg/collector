@@ -39,9 +39,12 @@ export default class List extends React.Component
 
     renderItem( doc )
     {
+        var uri = this.props.uri;
         return React.createElement(
             "a",
-            null,
+            {
+                href: uri.view( doc )
+            },
             this.renderThumbnail( doc )
         );
     }
@@ -63,8 +66,12 @@ export default class List extends React.Component
     }
 
     renderSubtitle( doc ) {
-        var subtitle = doc.released || doc.season;
+        var subtitle = this.getSubtitle(doc);
         return React.createElement("h6", null, subtitle );
+    }
+
+    getSubtitle( doc ) {
+        return doc.season || doc.released || doc.added;
     }
 }
 
