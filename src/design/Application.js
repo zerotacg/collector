@@ -1,9 +1,11 @@
 import React from "react";
 
-import Main         from "collector/component/Viewport";
-import NavBar       from "collector/component/navigation/NavBar";
+import Viewport from "collector/component/Viewport";
+import NavBar from "collector/component/navigation/NavBar";
+import List from "collector/component/list/List";
 
 import "bootstrap/css/bootstrap.css!";
+import "resources/css/collector.css!";
 
 export default class Application
 {
@@ -15,9 +17,10 @@ export default class Application
     createMain()
     {
         return React.createElement(
-            Main,
+            Viewport,
             null,
-            this.createNavBar()
+            this.createNavBar(),
+            this.createContent()
         );
     }
 
@@ -30,12 +33,49 @@ export default class Application
             },
             [
                 {
-                    path: "",
-                    text: "Home"
+                    href: "",
+                    children: "Home"
                 },
                 {
-                    path: "#recent",
-                    text: "Recent"
+                    href: "#recent",
+                    children: "Recent"
+                }
+            ]
+        );
+    }
+
+    createContent()
+    {
+        return React.createElement(
+            List,
+            null,
+            [
+                {
+                    _id: "1",
+                    image: "http://ecx.images-amazon.com/images/I/51H2c+aT72L._AA160_.jpg",
+                    name: "Jack und das Kuckucksuhrherz",
+                    released: "2013"
+                },
+
+                {
+                    _id: "2",
+                    image: "http://ecx.images-amazon.com/images/I/51tyufSkADL._AA160_.jpg",
+                    name: "Bernie",
+                    released: "2011"
+                },
+
+                {
+                    _id: "3",
+                    image: "http://ecx.images-amazon.com/images/I/91ITRc1jjBL._AA160_.jpg",
+                    name: "Guardians of the Galaxy",
+                    released: "2014"
+                },
+
+                {
+                    _id: "4",
+                    image: "http://ecx.images-amazon.com/images/I/91mKE0I2oPL._AA160_.jpg",
+                    name: "Big Bang Theory",
+                    season: "Staffel 7"
                 }
             ]
         );

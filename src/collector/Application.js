@@ -6,15 +6,18 @@ import React from "react";
 import Rx from "rx";
 import PouchDB from "pouchdb";
 
-import Config       from "./config/Config";
-import defaults     from "./config/defaults";
-import Main         from "./component/Viewport";
-import Form         from "./component/form/Form";
-import NavBarContainer from "./component/navigation/NavBarContainer";
-import Value        from "./store/Value";
+import Config           from "./config/Config";
+import defaults         from "./config/defaults";
+import Viewport         from "./component/Viewport";
+import Form             from "./component/form/Form";
+import ListContainer    from "./component/list/ListContainer";
+import NavBarContainer  from "./component/navigation/NavBarContainer";
+import Value            from "./store/Value";
+import DatabaseStore    from "./store/Database";
 //import collector    from "./database/collector";
 
 import "bootstrap/css/bootstrap.css!";
+import "resources/css/collector.css!";
 
 export default class Application extends Events
 {
@@ -68,15 +71,16 @@ export default class Application extends Events
     init()
     {
         this.router.init();
-        React.render( this.createMain(), document.getElementById( "viewport" ) );
+        React.render( this.createViewport(), document.getElementById( "viewport" ) );
     }
 
-    createMain()
+    createViewport()
     {
         return React.createElement(
-            Main,
+            Viewport,
             null,
-            this.createNavBar()
+            this.createNavBar(),
+            this.createContent()
         );
     }
 
@@ -86,5 +90,28 @@ export default class Application extends Events
             NavBarContainer,
             { path: this.path_stream }
         );
+    }
+
+    createContent()
+    {
+        var store = this.store = this.createRecentStore( this.db );
+        return React.createElement(
+            ListContainer,
+            { itemStream: store.getItems() }
+        );
+    }
+
+    createRecentStore( db )
+    {
+        db = Rx.Observable.fromPromise(db);
+
+        return new DatabaseStore({
+            db,
+            view: "added",
+            queryOptions: {
+                include_docs: true,
+                descending: true
+            }
+        });
     }
 }

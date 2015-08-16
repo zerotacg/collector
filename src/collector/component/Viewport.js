@@ -10,7 +10,7 @@ export default class Viewport extends React.Component {
     render() {
         return React.createElement(
             "div",
-            { role: "application" },
+            null,
             this.props.children
         );
     }
