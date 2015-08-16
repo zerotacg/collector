@@ -2,11 +2,11 @@ import chai from "chai";
 import React from "react";
 import TestUtils from "react/addons/TestUtils";
 
-import Main from "collector/component/Main";
+import Viewport from "collector/component/Viewport";
 import NavBar from "collector/component/navigation/NavBar";
 
 describe("component", function () {
-    describe("Main", function () {
+    describe("Viewport", function () {
         var expect = chai.expect;
 
         describe("#render()", function () {
@@ -14,13 +14,13 @@ describe("component", function () {
             });
 
             function renderComponent( props ) {
-                var element = React.createElement(Main, props);
+                var element = React.createElement(Viewport, props);
                 return TestUtils.renderIntoDocument(element);
             }
 
             it("should not fail", function () {
-                var main = renderComponent();
-                expect( main ).to.be.ok;
+                var viewport = renderComponent();
+                expect( viewport ).to.be.ok;
             });
         });
     });

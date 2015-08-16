@@ -1,5 +1,5 @@
 import chai from "chai";
-import Application from "src/collector/Application";
+import Application from "collector/Application";
 
 describe("collector", function () {
     "use strict";

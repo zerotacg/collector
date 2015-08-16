@@ -8,7 +8,7 @@ import PouchDB from "pouchdb";
 
 import Config       from "./config/Config";
 import defaults     from "./config/defaults";
-//import Main         from "./component/Main";
+import Main         from "./component/Viewport";
 import Form         from "./component/form/Form";
 import NavBar       from "./component/navigation/NavBar";
 import Value        from "./store/Value";
@@ -68,7 +68,16 @@ export default class Application extends Events
     init()
     {
         this.router.init();
-        React.render( this.createNavBar(), document.getElementById( "application" ) );
+        React.render( this.createMain(), document.getElementById( "viewport" ) );
+    }
+
+    createMain()
+    {
+        return React.createElement(
+            Main,
+            null,
+            this.createNavBar()
+        );
     }
 
     createNavBar()

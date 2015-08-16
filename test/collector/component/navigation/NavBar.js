@@ -17,9 +17,7 @@ describe("component", function () {
                 var nav;
 
                 beforeEach("setup", function () {
-                    nav = render(NavBar, {
-                        path: new Rx.Subject()
-                    });
+                    nav = render(NavBar);
                 });
 
                 it("should not fail", function () {
