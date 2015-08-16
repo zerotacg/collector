@@ -41,10 +41,12 @@ export default class NavBarContainer extends React.Component
         return React.createElement(
             NavBar,
             {},
-            {
-                path: "recent",
-                text: "Recent"
-            }
+            [
+                {
+                    href: "#recent",
+                    children: "Recent"
+                }
+            ]
         );
     }
 }

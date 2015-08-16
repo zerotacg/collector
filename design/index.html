@@ -6,70 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Collector</title>
-    <link rel="stylesheet" href="../jspm_packages/github/twbs/bootstrap@3.3.5/css/bootstrap.min.css">
-
-    <link rel="stylesheet" href="../resources/css/collector.css"/>
+    <script src="../jspm_packages/system.js"></script>
+    <script src="../config.js"></script>
 </head>
-<body role="document">
-    <nav role="navigation" class="navbar navbar-default navbar-fixed-top">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="./">Collector</a>
-            </div>
-            <ul class="nav navbar-nav collapse navbar-collapse">
-                <li class="active"><a href="#home">Home</a></li>
-                <li><a href="#recent">Recent</a></li>
-                <li><a href="#genre">Genre</a></li>
-                <li><a href="config.html">Config</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="container-fluid" role="main">
-        <div class="row">
-            <div class="col-xs-4 col-sm-2 col-lg-2">
-                <a href="view.html" class="thumbnail">
-                    <img src="http://ecx.images-amazon.com/images/I/51H2c+aT72L._AA160_.jpg">
-                    <div class="caption">
-                        <h5>Jack und das Kuckucksuhrherz</h5>
-                        <h6>2013</h6>
-                    </div>
-                </a>
-            </div>
-            <div class="col-xs-4 col-sm-2 col-lg-2">
-                <a href="#" class="thumbnail">
-                    <img src="http://ecx.images-amazon.com/images/I/51tyufSkADL._AA160_.jpg">
-                    <div class="caption">
-                        <h5>Bernie</h5>
-                        <h6>2011</h6>
-                    </div>
-                </a>
-            </div>
-            <div class="col-xs-4 col-sm-2 col-lg-2">
-                <a href="#" class="thumbnail">
-                    <img src="http://ecx.images-amazon.com/images/I/91ITRc1jjBL._AA160_.jpg">
-                    <div class="caption">
-                        <h5>Guardians of the Galaxy</h5>
-                        <h6>2014</h6>
-                    </div>
-                </a>
-            </div>
-            <div class="col-xs-4 col-sm-2 col-lg-2">
-                <a href="#" class="thumbnail">
-                    <img src="http://ecx.images-amazon.com/images/I/91mKE0I2oPL._AA160_.jpg">
-                    <div class="caption">
-                        <h5>Big Bang Theory</h5>
-                        <h6>Staffel 7</h6>
-                    </div>
-                </a>
-            </div>
-        </div>
+<body>
+    <div id="viewport">
     </div>
+
+    <script>
+        System.config({
+            "baseURL": "../"
+        });
+        System.import( "design/main" );
+    </script>
 </body>
 </html>

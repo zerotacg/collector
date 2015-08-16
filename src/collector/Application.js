@@ -10,7 +10,7 @@ import Config       from "./config/Config";
 import defaults     from "./config/defaults";
 import Main         from "./component/Viewport";
 import Form         from "./component/form/Form";
-import NavBar       from "./component/navigation/NavBarContainer";
+import NavBarContainer from "./component/navigation/NavBarContainer";
 import Value        from "./store/Value";
 //import collector    from "./database/collector";
 

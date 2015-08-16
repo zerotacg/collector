@@ -9,6 +9,7 @@ System.config({
   "paths": {
     "*": "*.js",
     "collector/*": "src/collector/*.js",
+    "design/*": "src/design/*.js",
     "github:*": "jspm_packages/github/*.js",
     "npm:*": "jspm_packages/npm/*.js"
   }

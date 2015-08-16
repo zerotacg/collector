@@ -26,13 +26,18 @@ export default class Application
         return React.createElement(
             NavBar,
             {
-                items: [
-                    {
-                        path: "recent",
-                        text: "Recent"
-                    }
-                ]
-            }
+                activeKey: ""
+            },
+            [
+                {
+                    path: "",
+                    text: "Home"
+                },
+                {
+                    path: "#recent",
+                    text: "Recent"
+                }
+            ]
         );
     }
 }

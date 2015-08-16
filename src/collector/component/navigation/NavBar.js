@@ -11,12 +11,12 @@ export default class NavBar extends React.Component {
     }
 
     renderNav() {
-        var items = this.props.items.map(this.createNavItem);
+        var items = this.props.children.map(this.createNavItem);
 
         return React.createElement(
             Nav,
             {
-                activeKey: this.props.path
+                activeKey: this.props.activeKey
             },
             items
         );
@@ -24,16 +24,13 @@ export default class NavBar extends React.Component {
 
     createNavItem( config ) {
 
-        var path = "recent";
-        var text = "Recent";
+        var { href } = config;
         return React.createElement(
             NavItem,
-            {
-                href: "#" + path,
-                eventKey: path,
-                key: path,
-                children: text
-            }
+            React.__spread({
+                eventKey: href,
+                key: href
+            }, config )
         );
     }
 }
