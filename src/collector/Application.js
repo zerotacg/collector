@@ -10,7 +10,7 @@ import Config       from "./config/Config";
 import defaults     from "./config/defaults";
 import Main         from "./component/Viewport";
 import Form         from "./component/form/Form";
-import NavBar       from "./component/navigation/NavBar";
+import NavBar       from "./component/navigation/NavBarContainer";
 import Value        from "./store/Value";
 //import collector    from "./database/collector";
 
@@ -83,7 +83,7 @@ export default class Application extends Events
     createNavBar()
     {
         return React.createElement(
-            NavBar,
+            NavBarContainer,
             { path: this.path_stream }
         );
     }

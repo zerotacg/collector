@@ -1,37 +1,28 @@
 import chai from "chai";
 import React from "react";
 import TestUtils from "react/addons/TestUtils";
+import NavItem from "react-bootstrap/lib/NavItem";
 import Rx from "rx";
 
 import { render } from "../TestUtils";
 
-import NavBar from "collector/component/navigation/NavBar";
-import Recent from "collector/component/navigation/item/Recent";
+import NavBarContainer from "collector/component/navigation/NavBarContainer";
 
 describe("component", function () {
     describe("navigation", function () {
-        describe("NavBar", function () {
+        describe("NavBarContainer", function () {
             var expect = chai.expect;
 
             describe("#render()", function () {
                 var nav;
 
                 beforeEach("setup", function () {
-                    nav = render(NavBar);
+                    nav = render(NavBarContainer);
                 });
 
                 it("should not fail", function () {
                     expect( nav ).to.be.ok;
                 });
-
-                it("should contain a NavBar", function () {
-                    expectNavToContainType(Recent);
-                });
-
-                function expectNavToContainType( Type ) {
-                    var found = TestUtils.findRenderedComponentWithType(nav, Type);
-                    expect(found).to.be.ok;
-                }
 
                 it("should have a path_observable", function () {
                     expect( nav.state ).to.have.property( "path" );
@@ -40,7 +31,7 @@ describe("component", function () {
                 it("should listen to path changes", function ( done ) {
                     var path = "recent";
                     var subject = new Rx.Subject();
-                    var nav = render(NavBar, {
+                    var nav = render(NavBarContainer, {
                         path: subject
                     });
                     subject.subscribeOnCompleted(function() {

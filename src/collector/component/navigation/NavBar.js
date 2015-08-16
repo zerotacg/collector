@@ -1,73 +1,47 @@
 import React        from "react";
-import Grid         from "react-bootstrap/lib/Grid";
 import Nav          from "react-bootstrap/lib/Nav";
 import Navbar       from "react-bootstrap/lib/Navbar";
 import NavItem      from "react-bootstrap/lib/NavItem";
 
-import { default as Value, EVENT_CHANGE } from "../../store/Value";
-
 import Brand from "../Brand";
-import Recent from "./item/Recent";
 
-export default class NavBar extends React.Component
-{
-    constructor( props )
-    {
-        super( props );
-
-        this.state = {
-            path: undefined
-        };
-    }
-
-    componentDidMount()
-    {
-        var path = this.props.path;
-        if ( path )
-        {
-            this.subscription = path.subscribeOnNext( this.setPath, this );
-        }
-    }
-
-    componentWillUnmount()
-    {
-        if ( this.subscription )
-        {
-            this.subscription.dispose();
-        }
-    }
-
-    setPath( path )
-    {
-        this.setState({ path });
-    }
-
-    render()
-    {
-        return React.createElement(
-            Navbar,
-            this.props,
-            this.renderNav()
-        );
+export default class NavBar extends React.Component {
+    render() {
+        return React.createElement(Navbar, this.props, this.renderNav());
     }
 
     renderNav() {
+        var items = this.props.items.map(this.createNavItem);
+
         return React.createElement(
             Nav,
-            { activeKey: this.state.path },
-            React.createElement(Recent)
+            {
+                activeKey: this.props.path
+            },
+            items
+        );
+    }
+
+    createNavItem( config ) {
+
+        var path = "recent";
+        var text = "Recent";
+        return React.createElement(
+            NavItem,
+            {
+                href: "#" + path,
+                eventKey: path,
+                key: path,
+                children: text
+            }
         );
     }
 }
 
-NavBar.propTypes = {
-    path: React.PropTypes.shape({
-        subscribeOnNext: React.PropTypes.func.isRequired
-    })
-};
+NavBar.propTypes = {};
 
 NavBar.defaultProps = {
-    brand: React.createElement( Brand ),
+    brand: React.createElement(Brand),
     fixedTop: true,
     fluid: true
 };
