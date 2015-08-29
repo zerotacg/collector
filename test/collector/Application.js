@@ -35,8 +35,7 @@ describe("collector", function () {
                     .then( db => {
                         expect( db ).to.equal( db_config );
                     })
-                    .then( done )
-                    .catch( done )
+                    .then( done, done )
                 ;
             });
         });

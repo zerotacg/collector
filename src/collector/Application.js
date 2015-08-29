@@ -1,29 +1,21 @@
 import director from "director";
 import DocUri from "docuri";
-import Events from "events";
-import LocalForage  from "localforage";
 import React from "react";
 import Rx from "rx";
-import PouchDB from "pouchdb";
 
-import Config           from "./config/Config";
-import defaults         from "./config/defaults";
 import Viewport         from "./component/Viewport";
-import Form             from "./component/form/Form";
 import ListContainer    from "./component/list/ListContainer";
 import NavBarContainer  from "./component/navigation/NavBarContainer";
 import Value            from "./store/Value";
 import DatabaseStore    from "./store/Database";
-//import collector    from "./database/collector";
 
 import "bootstrap/css/bootstrap.css!";
 import "resources/css/collector.css!";
 
-export default class Application extends Events
+export default class Application
 {
     constructor( cfg )
     {
-        super();
         this.config = cfg.config;
         this.factory = cfg.factory;
         this.path = new Value();
@@ -41,12 +33,13 @@ export default class Application extends Events
     {
         var router = new director.Router();
         router.configure({
-            on: function(){ console.log("router", arguments ); }
+            on: function () {
+                console.log("router", arguments);
+            }
         });
         router.param( "path", /(.+)/ );
         router.mount({
             "recent": this.path.set.bind( this.path, "recent" )
-          //, "add/:barcode/:foo": console.log.bind( console, "add/:barcode" )
         });
 
         return router;

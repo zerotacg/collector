@@ -3,7 +3,6 @@ import React from "react";
 import TestUtils from "react/addons/TestUtils";
 
 import Viewport from "collector/component/Viewport";
-import NavBar from "collector/component/navigation/NavBar";
 
 describe("component", function () {
     describe("Viewport", function () {
