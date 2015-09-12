@@ -1,5 +1,4 @@
 import director from "director";
-import DocUri from "docuri";
 import React from "react";
 import Rx from "rx";
 
@@ -47,18 +46,7 @@ export default class Application
 
     createUri()
     {
-        var uri = this.uri = DocUri;
-        uri.routes({
-            ":type/:key": "id"
-          , "#view/:_id": "view"
-          , "#edit/:_id": "edit"
-          , "#genre(/:key)": "genre"
-          , "#field(/*key)": "field"
-          , "#browse(/*paths)": "browse"
-          , "#(:db/)recent": "recent"
-        });
-
-        return uri;
+        return this.factory.createUri();
     }
 
     init()

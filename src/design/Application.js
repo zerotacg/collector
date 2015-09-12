@@ -1,27 +1,24 @@
 import React from "react";
 
-import Viewport from "collector/component/Viewport";
+import CollectorApplication from "collector/Application";
 import NavBar from "collector/component/navigation/NavBar";
 import List from "collector/component/list/List";
 
-import "bootstrap/css/bootstrap.css!";
-import "resources/css/collector.css!";
-
-export default class Application
+export default class Application extends CollectorApplication
 {
-    init()
+    constructor(cfg)
     {
-        React.render( this.createMain(), document.getElementById( "viewport" ) );
+        super(cfg);
     }
 
-    createMain()
+    init()
     {
-        return React.createElement(
-            Viewport,
-            null,
-            this.createNavBar(),
-            this.createContent()
-        );
+        React.render( this.createViewport(), document.getElementById( "viewport" ) );
+    }
+
+    createDatabase()
+    {
+        return null;
     }
 
     createNavBar()
@@ -48,7 +45,7 @@ export default class Application
     {
         return React.createElement(
             List,
-            null,
+            { uri: this.uri },
             [
                 {
                     _id: "1",

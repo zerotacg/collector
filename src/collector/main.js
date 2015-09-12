@@ -1,7 +1,8 @@
-import Application from "collector/Application";
-import Config from "collector/config/Config";
-import Factory from "collector/Factory";
 import LocalForage  from "localforage";
+
+import Config from "collector/config/Config";
+import Application from "collector/Application";
+import Factory from "collector/Factory";
 
 import defaults from "collector/config/defaults";
 
