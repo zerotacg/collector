@@ -1,4 +1,3 @@
-import director from "director";
 import React from "react";
 import Rx from "rx";
 
@@ -17,36 +16,11 @@ export default class Application
     {
         this.config = cfg.config;
         this.factory = cfg.factory;
+        this.db = this.factory.createDatabase(this.config);
         this.path = new Value();
-        this.db = this.createDatabase();
-        this.router = this.createRouter();
-        this.uri = this.createUri();
-    }
-
-    createDatabase() {
-        var db_config = this.config.get("db");
-        return db_config.then( config => this.factory.createDatabase(config) );
-    }
-
-    createRouter()
-    {
-        var router = new director.Router();
-        router.configure({
-            on: function () {
-                console.log("router", arguments);
-            }
-        });
-        router.param( "path", /(.+)/ );
-        router.mount({
-            "recent": this.path.set.bind( this.path, "recent" )
-        });
-
-        return router;
-    }
-
-    createUri()
-    {
-        return this.factory.createUri();
+        this.router = this.factory.createRouter( this.path );
+        this.path_stream = this.factory.createPathStream( this.path );
+        this.uri = this.factory.createUri();
     }
 
     init()

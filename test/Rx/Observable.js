@@ -6,7 +6,7 @@ import { expectMessagesToEqual, expectMessageToEqual } from "test/Rx/ReactiveTes
 describe("Rx", function () {
     var expect = chai.expect;
     describe("Observable", function () {
-        describe("#coldObservable", function () {
+        describe("Cold Observable", function () {
             var onNext = Rx.ReactiveTest.onNext;
             var onError = Rx.ReactiveTest.onError;
 

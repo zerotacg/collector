@@ -14,7 +14,7 @@ export default class NavBarContainer extends React.Component
         };
     }
 
-    componentDidMount()
+    componentWillMount()
     {
         var path = this.props.path;
         if ( path )
@@ -38,12 +38,16 @@ export default class NavBarContainer extends React.Component
 
     render()
     {
+        console.log("nav container", this.state.path);
         return React.createElement(
             NavBar,
-            {},
+            {
+                activeKey: this.state.path
+            },
             [
                 {
                     href: "#recent",
+                    eventKey: "recent",
                     children: "Recent"
                 }
             ]
